@@ -1,0 +1,1778 @@
+/**
+ * WP-Property Default Frontend Styles
+ *
+ * @updated 1.37.0
+ */
+
+/* ===[ Global WP-Property Styles Begin ]=== */
+
+.wpp_clear {
+  clear: both;
+  font-size: 1px;
+  height: 1px;
+  line-height: 1px;
+  margin: -1px 0 0 0;
+  padding: 0;
+}
+
+.wpp_clearfix {
+  display: inline-block
+}
+
+html[xmlns] .wpp_clearfix {
+  display: block
+}
+
+.wpp_clearfix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  line-height: 0;
+  visibility: hidden;
+}
+
+* html .wpp_clearfix {
+  height: 1%
+}
+
+.wpp_no_image,
+.wpp_colon {
+  /* display: none */ /* It causes issue in Denali 3.1 version. peshkov@UD */
+}
+
+/* ===[ Global WP-Property Styles End ]=== */
+
+
+/* ===[ Default Icons Begin ]=== */
+
+.wpp_attachment_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_attachment_list  .attachment_container.has_description .attachment_description {
+  display: block;
+  padding-left: 23px;
+}
+
+.wpp_attachment_list  .wpp_attachment_icon.file-zip {
+  background: url("images/file-zip.gif") left center no-repeat
+}
+
+.property_stats .wpp_attachment_list  .attachment_container.has_description .attachment_description {
+  display: inline;
+  padding: 0;
+}
+
+/* ===[ Default Icons End ]=== */
+
+/* WP Touch Styles Begin
+   ================================================== */
+
+body.idevice div.listing_container .building_title_wrapper {
+  margin-top: 15px
+}
+
+body.idevice div.listing_container h1.property-title {
+  color: #222222;
+  display: block;
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 20px;
+  margin: 0;
+  padding: 0 0 2px;
+  text-align: left;
+}
+
+body.idevice div.listing_container .wpp_stats_group {
+  border-bottom: 1px solid #D7D7D7;
+  color: #484848;
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+body.idevice div.listing_container .entry-subtitle {
+  color: #999999;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 15px;
+  text-align: left;
+}
+
+body.idevice div.listing_container .wpp_property_stats,
+body.idevice div.listing_container #property_stats {
+  margin: 0 0 15px 0;
+  padding: 0;
+}
+
+body.idevice .wpp_property_overview_shortcode {
+  margin-top: 10px
+}
+
+body.idevice ul.wpp_overview_data {
+  padding-left: 10px
+}
+
+body.idevice ul.wpp_overview_data li {
+  list-style: none
+}
+
+body.idevice .wpp_sidebar_listing,
+body.idevice div.listing_container .building_title_wrapper,
+body.idevice div.listing_container .entry-content {
+  background-color: #FFFFFF;
+  border: 1px solid #B1B1B1;
+  margin-bottom: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  position: relative;
+  z-index: 0;
+}
+
+body.idevice .wpp_sidebar_listing .sidebar_gallery_item {
+  float: left
+}
+
+body.idevice .wpp_sidebar_listing .wpp_gallery_widget {
+  float: none;
+  overflow: auto;
+}
+
+body.idevice .wpp_property_stats.overview_stats,
+body.idevice .wpp_property_stats.overview_stats dt,
+body.idevice .wpp_property_stats.overview_stats dd,
+body.idevice #property_stats.overview_stats,
+body.idevice #property_stats.overview_stats dt,
+body.idevice #property_stats.overview_stats dd
+{
+  border: 0;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+body.idevice .wpp_property_stats.overview_stats dd,
+body.idevice #property_stats.overview_stats dd{
+  background: transparent;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+body.idevice .wpp_property_stats.overview_stats dt,
+body.idevice #property_stats.overview_stats dt{
+  font-weight: normal;
+  padding-left: 0;
+}
+
+body.idevice .wpp_sidebar_listing ul,
+body.idevice .wpp_sidebar_listing ul li {
+  list-style: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* WP Touch Styles End
+   ================================================== */
+
+/* FEPS Styles Begin
+   ================================================== */
+
+form.wpp_feps_form label.error {
+  display: block
+}
+
+form.wpp_feps_form ul.wpp_search_group {
+  list-style: none
+}
+
+form.wpp_feps_form li.wpp_feps_row_wrapper {
+  list-style: none
+}
+
+form.wpp_feps_form .wpp_feps_row_wrapper  .qq-upload-list {
+  list-tyle-type: none;
+  margin: 0;
+  padding-top: 15px;
+}
+
+form.wpp_feps_form  .wpp_feps_row_wrapper  .qq-upload-list .qq-upload-cancel {
+  color: #A0A0A0;
+  float: right;
+  text-decoration: none;
+}
+
+form.wpp_feps_form div.qq-upload-drop-area {
+  display: none !important
+}
+
+form.wpp_feps_form span.images_limit {
+  clear: both;
+  float: right;
+  right: 12px;
+  top: 4px;
+}
+
+form.wpp_feps_form  .qq-upload-list .qq-upload-size,
+form.wpp_feps_form  .qq-upload-list .wpp_upload_progress {
+  height: 20px
+}
+
+form.wpp_feps_form .qq-upload-list .qq-upload-size {
+  border: 1px solid #BFBDBD;
+  clear: both;
+  display: block;
+}
+
+form.wpp_feps_form .qq-upload-list .wpp_upload_progress {
+  background: #666666;
+  display: block;
+  float: left;
+  text-align: right;
+}
+
+form.wpp_feps_form .qq-upload-list .wpp_upload_progress .wpp_upload_progress_text {
+  color: #FFF;
+  display: block;
+  float: right;
+}
+
+form.wpp_feps_form   .qq-upload-list .wpp_upload_progress_text {
+  /* fixed height to fit into progress bar wrapper */
+  display: block;
+  float: left;
+  font-size: 11px;
+  line-height: 20px;
+  margin: 0 4px;
+  nowhitespace: afterproperty;
+}
+
+form.wpp_feps_form .qq-uploader li {
+  margin: 0 10px 10px 0;
+  padding: 0;
+}
+
+form.wpp_feps_form  .qq-uploader li.qq-upload-success {
+  display: inline
+}
+
+form.wpp_feps_form .qq-upload-failed-text {
+  display: none
+}
+
+form.wpp_feps_form ul.feps_user_input_fields,
+form.wpp_feps_form ul.feps_property_input_fields {
+  clear: both;
+  margin: 0;
+}
+
+ul.feps_user_input_fields li.wpp_feps_row_wrapper,
+ul.feps_property_input_fields li.wpp_feps_row_wrapper {
+  list-style: none;
+  list-style-type: none;
+}
+
+form.wpp_feps_form ul.feps_property_input_fields .qq-upload-button {
+  background: none repeat scroll 0 0 #DDDDDD;
+  border: 1px solid #BBBBBB;
+  border-radius: 3px 3px 3px 3px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  text-align: center;
+  width: 101px;
+}
+
+ul.feps_property_input_fields li.wpp_feps_row_wrapper.wpp_checkbox input.wpp_checkbox {
+  float: left;
+  position: relative;
+  top: 7px;
+}
+
+ul.feps_property_input_fields li.wpp_feps_row_wrapper.wpp_checkbox  label {
+
+}
+
+ul.feps_property_input_fields li.wpp_feps_row_wrapper.wpp_checkbox  label span.description {
+  float: none
+}
+
+ul.feps_user_input_fields li.wpp_feps_row_wrapper {
+  background: #EBEBEB
+}
+
+ul.feps_property_input_fields label {
+  margin-bottom: 1px
+}
+
+ul.feps_user_input_fields input[type="text"] {
+  width: 20em
+}
+
+ul.feps_property_input_fields label span.description {
+  float: right
+}
+
+ul.feps_property_input_fields label span.the_title,
+ul.feps_user_input_fields label span.the_title {
+  font-weight: bold
+}
+
+ul.feps_property_input_fields textarea {
+  min-height: 100px
+}
+
+ul.feps_property_input_fields textarea,
+ul.feps_property_input_fields input[type="text"],
+ul.feps_user_input_fields input[type="text"],
+ul.feps_user_input_fields input[type="password"] {
+  display: block;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  width: 97%;
+}
+
+ul.feps_property_input_fields select {
+  -khtml-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+  -mox-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+  background: none repeat scroll 0 0 #FAFAFA;
+  border: 1px solid #DDDDDD;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+  color: #888888;
+  padding: 3px;
+  width: 100%;
+}
+
+ul.feps_property_input_fields .description {
+  font-weight: normal
+}
+
+.wpp_property_overview_shortcode div.wpp_feps_row ul.wpp_overview_data li {
+  float: none;
+}
+
+.wpp_property_overview_shortcode div.wpp_feps_row ul.wpp_overview_data .actions li {
+  float: left;
+  margin-right: 10px;
+}
+
+.wpp_property_overview_shortcode div.wpp_feps_row ul.wpp_overview_data .expired_date.empty {
+  visibility: hidden;
+}
+
+.entry-content ul.wpp_feps_step_tabs {
+  margin: 1em 0px;
+  padding: 0px;
+  z-index: 1;
+}
+
+.entry-content ul.wpp_feps_step_tabs li {
+  display: inline;
+  overflow: hidden;
+  list-style-type: none;
+  color: grey;
+  font: 1em "Trebuchet MS", Arial, sans-serif;
+  padding: 3px 5px;
+  text-decoration: none;
+
+  background-color: #F7F7F7;
+  border-width: 1px 1px 0px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  cursor: default;
+  margin-right: 10px;
+}
+
+
+.entry-content ul.wpp_feps_step_tabs li.active {
+  font-weight: bold;
+  background-color: #6A8DA5;
+  color: white;
+}
+/*
+.entry-content ul.wpp_feps_step_tabs li:hover {
+  color: #777;
+  background-color: #f7f7f7;
+}
+
+.entry-content ul.wpp_feps_step_tabs li.active:hover {
+  background-color: #f9f9f9;
+  color: #707070; }
+*/
+.wpp_feps_tab_content {
+  padding: 20px;
+  border-top: none;
+  z-index: 2;
+  background-color: #F7F7F7;
+  border: 1px solid #D6D6D6;
+}
+
+.wpp_feps_subscription_plan tr {
+  background-color: white;
+}
+
+#content td.wpp_feps_subscription_plan_radio_holder {
+  width:10%;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 4%;
+
+}
+#content ul.wpp_feps_subscription_plan_info{
+  overflow: hidden;
+}
+
+#content ul.wpp_feps_subscription_plan_info li{
+  float: left;
+  min-width: 10em;
+  padding-left: 0em;
+  list-style: none;
+}
+
+.wpp_feps_pay_now.payment_form{
+  width:34%;
+}
+
+.wpp_feps_balance_inner {
+  display: inline-block;
+  padding: 1em;
+  margin: 1em;
+  width: 195px;
+  float: right;
+  white-space: nowrap;
+  border: 1px solid #D6D6D6;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background-color: #fefefe;
+}
+
+.wpp_feps_pay_now.payment_form label,
+.wpp_feps_pay_now.payment_form span.currency{
+  font-size: 1.1em;
+}
+
+.wpp_feps_pay_now.payment_form button{
+  margin: 1em 1em 0;
+}
+
+.wpp_feps_pay_now.payment_form span.value{
+  color: #4D4D4D;
+  padding: 0 0.2em;
+  font-size: 1.2em;
+}
+
+.wpp_feps_user_menu .wpp_feps_filter,
+.wpp_feps_user_menu .wpp_feps_all_listings { margin-top: 10px; }
+.wpp_feps_user_menu li { margin: 0; }
+
+/* FEPS Styles End
+   ================================================== */
+
+#wp-admin-bar-wpp_approve_property {
+  background: #CF982D
+}
+
+#wp-admin-bar-wpp_approve_property a {
+  color: #FFFFFF
+}
+
+/* WPP Sorter and Pagination Begin {
+   ================================================== */
+
+.wpp_pagination_slider_wrapper .wpp_pagination_back,
+.wpp_pagination_slider_wrapper .wpp_pagination_forward {
+  border-radius: 5px 5px 5px 5px;
+  cursor: pointer;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  width: 8%;
+}
+
+.wpp_sorter_options {
+  float: right
+}
+
+.wpp_sorter_options .wpp_sortable_link.wpp_sorted_element {
+  background: none repeat scroll 0 0 #D36E09;
+  color: #1C1711;
+}
+
+.wpp_sorter_options .wpp_sortable_link {
+  background: none repeat scroll 0 0 #2F2F2F;
+  border-radius: 6px 6px 6px 6px;
+  color: #CCCCCC;
+  cursor: pointer;
+  margin-left: 6px;
+  padding: 1px 4px;
+}
+
+.properties_pagination.wpp_top_pagination,
+.properties_pagination.wpp_bottom_pagination {
+  margin-bottom: 1em
+}
+
+.wpp_ui .wpp_pagination_slider_wrapper .wpp_pagination_forward {
+  float: right
+}
+
+.wpp_pagination_slider_wrapper .wpp_pagination_back {
+  float: left
+}
+
+.wpp_ui .wpp_pagination_slider.ui-slider-horizontal {
+  background: none repeat scroll 0 0 #DDDDDD;
+  border: 1px solid #606060;
+  height: 16px;
+  margin: 0 auto;
+  width: 75%;
+}
+
+.wpp_ui .wpp_pagination_slider.ui-slider-horizontal .ui-slider-handle {
+  height: 24px;
+  margin-left: -8px;
+  top: -4px;
+  width: 26px;
+}
+
+.wpp_pagination_slider_status {
+  min-height: 35px
+}
+
+.wpp_pagination_slider .slider_page_info {
+  display: none;
+  height: 15px;
+  left: -3px;
+  position: absolute;
+  top: -31px;
+}
+
+.wpp_property_overview_shortcode,
+.wpp_slider_pagination {
+  position: relative
+}
+
+.wpp_property_overview_shortcode .ajax_loader {
+  -khtml-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background: #DDDDDD url("images/ajax-loader-po.gif") center center no-repeat;
+  border: 1px solid #606060;
+  border-radius: 4px;
+  display: none;
+  height: 80px;
+  left: 50%;
+  margin: 0 0 0 -40px;
+  position: absolute;
+  top: 100px;
+  width: 80px;
+  z-index: 10;
+}
+
+.wpp_ui .wpp_pagination_slider.wpp_slider_loading .ui-slider-handle {
+  background-image: url("images/ajax-loader-sm.gif");
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* WPP Sorter and Pagination End}
+   ================================================== */
+
+.wpp_agent_info_list  dd {
+  display: table-cell
+}
+
+.wpp_agent_info_list  dd .wpp_agent_attribute_link {
+  left: -3px;
+  position: relative;
+}
+
+.wpp_agent_info_list dt {
+  display: table-cell;
+  float: left;
+  padding-right: 5px;
+}
+
+.property_widget_block li span.value {
+  display: block
+}
+
+.property_widget_block li span.attribute {
+  color: #A3A2A2;
+  display: block;
+  float: left;
+  margin-right: 5px;
+}
+
+.property_widget_block ul {
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_google_maps_attribute_row_directions_link {
+  border-top: 1px solid #E0E0E0;
+  font-size: 0.9em;
+  margin-top: 5px;
+  padding-top: 4px;
+}
+
+.wpp_google_maps_icon{
+  width:16px;
+  height:16px;
+  margin: 0 0 -3px 6px;
+  display:none;
+}
+
+.address_is_formatted .wpp_google_maps_icon{
+  background: url("images/successful_16.png") no-repeat scroll right center transparent;
+  display: inline-block;
+}
+
+.address_is_not_formatted .wpp_google_maps_icon{
+  background: url("images/failed_16.png") no-repeat scroll right center transparent;
+  display: inline-block;
+}
+
+/* ===[ Must use ID on these elements to prevent themes unintentionally conflicting the styles ]=== */
+
+#infowindow table.wpp_google_maps_infobox_table,
+#infowindow table.wpp_google_maps_infobox_table td {
+  border: 0;
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+}
+
+#infowindow table.wpp_google_maps_infobox_table td.wpp_google_maps_right_col {
+  padding: 0
+}
+
+#infowindow table.wpp_google_maps_infobox_table img {
+  position: static
+}
+
+#infowindow table.wpp_google_maps_infobox_table td.wpp_google_maps_left_col {
+  padding-right: 15px
+}
+
+#infowindow table.wpp_google_maps_infobox_table td {
+  padding-left: 3px;
+  padding-right: 1px;
+  vertical-align: top;
+}
+
+#infowindow .wpp_google_maps_attribute_row_property_title {
+  border-bottom: 1px solid #EEEEEE;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+#infowindow ul.infobox_child_property_list,
+#infowindow .wpp_google_maps_right_col {
+  clear: both;
+  list-style-type: none;
+  margin: 0;
+  padding: 0px;
+}
+
+
+#infowindow .wpp_google_maps_right_col li.wpp_google_maps_attribute_row.wpp_fillter_element,
+#infowindow ul.infobox_child_property_list li.infobox_child_property.wpp_fillter_element {
+  background: transparent !important;
+  border-width: 0;
+  height: 10px;
+}
+
+#infowindow .wpp_google_maps_right_col .wpp_attribute span.attribute {
+  display: block;
+  float: left;
+  margin: 0 10px 0 4px;
+  width: 85px;
+  font-weight: normal;
+  padding-left:0;
+}
+
+#infowindow .wpp_google_maps_right_col .wpp_attribute span.attribute .separator{
+  display: none;
+}
+
+#infowindow .wpp_google_maps_right_col li.wpp_attribute {
+  border-bottom: 1px solid #F1F1F1;
+  background: none repeat scroll 0 0 transparent;
+}
+
+#infowindow .wpp_google_maps_right_col li.wpp_attribute,
+#infowindow ul.infobox_child_property_list .infobox_child_property {
+  line-height: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#infowindow .wpp_google_maps_right_col li.wpp_attribute:hover {
+  background: #F5F3ED
+}
+
+#infowindow ul.infobox_child_property_list .infobox_child_property {
+  margin-left: 5px
+}
+
+.wpp_google_maps_right_col .wpp_attribute span.value {
+  display: block;
+  float: left;
+  margin-right: 10px;
+  width: auto;
+}
+
+#property_map img {
+  max-width: none;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: absolute;
+}
+
+/* ===[ Version 1.0 End ]=== */
+
+div.wpp_shortcode_search {
+  background: #F2F2F2;
+  padding: 10px;
+  position: relative;
+}
+
+div.wpp_shortcode_search ul.wpp_search_elements {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.wpp_shortcode_search ul.wpp_search_elements li {
+  margin-bottom: 4px;
+  margin-left: 0;
+  margin-bottom: 10px;
+}
+
+div.wpp_shortcode_search ul.wpp_search_elements li.submit {
+  padding: 5px;
+  text-align: right;
+  width: auto !important;
+}
+
+div.wpp_shortcode_search ul.wpp_search_elements li.submit .wpp_search_button {
+  margin: 0
+}
+
+div.wpp_shortcode_search ul.wpp_search_elements label {
+  display: block;
+  float: left;
+  width: 150px;
+}
+
+.shortcode_featured_properties dl,
+.shortcode_featured_properties dd,
+.shortcode_featured_properties dt {
+  margin: 0
+}
+
+.shortcode_featured_properties ul li dl {
+  height: 1em;
+  margin: 4px;
+  padding: 4px;
+}
+
+.shortcode_featured_properties ul li dt {
+  float: left;
+  font-size: 0.8em;
+  font-weight: normal;
+  padding-left: 5px;
+  padding-top: 3px;
+}
+
+.shortcode_featured_properties ul li dd {
+  float: right;
+  padding-right: 5px;
+}
+
+.big_featured_property ul {
+  display: table;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.big_featured_property ul li {
+  display: table-cell;
+  width: 33%;
+}
+
+.big_featured_property ul li dt {
+  color: #D6D6D6;
+  float: left;
+  font-size: 0.8em;
+  font-weight: normal;
+  padding-left: 5px;
+  padding-top: 3px;
+}
+
+.big_featured_property ul li dd {
+  float: right;
+  padding-right: 5px;
+}
+
+.shortcode_featured_properties ul li dt,
+.big_featured_property ul li dd {
+  display: block
+}
+
+.big_featured_property ul li dt,
+.big_featured_property ul li dd {
+  display: block
+}
+
+.big_featured_property ul li dl {
+  background: none repeat scroll 0 0 #767676;
+  color: #FFFFFF;
+  font-size: 1.3em;
+  height: 1em;
+  location: all;
+  margin: 4px;
+  padding: 4px;
+}
+
+.wpp_featured_properties_shortcode {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_featured_properties_shortcode li.wp-caption {
+  display: inline;
+  float: left;
+}
+
+.shortcode_featured_properties ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 5px;
+}
+
+.shortcode_featured_properties ul li span {
+  float: left;
+  font-weight: bold;
+  text-align: left;
+  width: 90px;
+}
+
+.shortcode_featured_properties ul li p {
+  float: left;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 60px;
+}
+
+input.wpp_search_input_field_min,
+input.wpp_search_input_field_max {
+  width: 40px
+}
+
+#container.floorplan_container {
+  margin: 0 -270px 0 0
+}
+
+#container.floorplan_container #content {
+  margin: 0 300px 0 20px
+}
+
+#container.building_container {
+  margin: 0 -270px 0 0
+}
+
+#container.building_container #content {
+  margin: 0 300px 0 20px
+}
+
+
+/* ** PROPERTY STATS **
+   ================================================== */
+
+#property_stats.overview_stats .wpp_attribute.wpp_detail,
+.wpp_property_stats.overview_stats .wpp_attribute.wpp_detail{
+  padding: 15px;
+}
+
+#property_stats.overview_stats .wpp_attribute.wpp_detail .attribute,
+.wpp_property_stats.overview_stats .wpp_attribute.wpp_detail .attribute{
+  display: block;
+  float: none;
+  padding: 0;
+}
+
+#property_stats.overview_stats .wpp_attribute.wpp_detail .separator,
+.wpp_property_stats.overview_stats .wpp_attribute.wpp_detail .separator{
+  display: none;
+}
+
+#property_stats.overview_stats .wpp_attribute.wpp_detail .value,
+.wpp_property_stats.overview_stats .wpp_attribute.wpp_detail .value{
+  text-align: justify;
+  display: block;
+}
+
+#property_stats.overview_stats,
+.wpp_property_stats.overview_stats {
+  border-top: 1px dashed #CFCBCB;
+  clear: both;
+  margin-bottom: 15px;
+}
+
+.super_map_list_property .wpp_property_stats.overview_stats,
+.super_map_list_property .wpp_property_stats.overview_stats .wpp_even_row,
+.super_map_list_property #property_stats.overview_stats,
+#body_container .main .super_map_list_property .wpp_property_stats.overview_stats
+{
+  background:none repeat scroll 0 0 transparent;
+}
+
+#property_stats.overview_stats dd.wpp_even_row,
+.wpp_property_stats.overview_stats dd.wpp_even_row {
+  background: #eee
+}
+
+#property_stats.overview_stats dd,
+.wpp_property_stats.overview_stats dd {
+  border-bottom: 1px dashed #CFCBCB;
+  padding-left: 165px;
+}
+
+#property_stats.overview_stats dt,
+#property_stats.overview_stats dd,
+.wpp_property_stats.overview_stats dt,
+.wpp_property_stats.overview_stats dd {
+  display: block;
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+#property_stats.overview_stats dd span,
+.wpp_property_stats.overview_stats dd span {
+
+}
+
+#property_stats.overview_stats dt,
+.wpp_property_stats.overview_stats dt {
+  clear: left;
+  float: left;
+  font-weight: bold;
+  padding-left: 15px;
+  width: 150px;
+}
+
+ul#property_stats.list,
+ul.wpp_property_stats.list {
+  list-style-position: inside;
+  list-style-type: none;
+  margin: 15px 0;
+}
+
+ul#property_stats.list li.wpp_even_row,
+ul.wpp_property_stats.list li.wpp_even_row {
+  background: none repeat scroll 0 0 #EEEEEE
+}
+
+ul#property_stats.list li,
+ul.wpp_property_stats.list li {
+  border-bottom: 1px dashed #CFCBCB;
+  clear: both;
+  padding: 10px 0;
+}
+
+ul#property_stats.list li.show_true_as_image,
+ul.wpp_property_stats.list li.show_true_as_image {
+  overflow: hidden;
+}
+
+.super_map_list_property ul li.wpp_attributes {
+  padding-left: 8px;
+}
+
+.super_map_list_property ul li.wpp_attributes ul.wpp_property_stats.list{
+  margin: 0;
+}
+
+ul#property_stats.list,
+ul.wpp_property_stats.list {
+
+  margin: 15px 0;
+}
+
+.super_map_list_property ul#property_stats.list li,
+.super_map_list_property ul.wpp_property_stats.list li{
+  padding: 0;
+  border-bottom: 0;
+}
+
+ul#property_stats.list li .attribute,
+ul.wpp_property_stats.list li .attribute {
+  display: block;
+  float: left;
+  font-weight: bold;
+  padding-left: 15px;
+  width: 150px;
+}
+
+.super_map_list_property ul#property_stats.list li .attribute,
+.super_map_list_property ul.wpp_property_stats.list li .attribute{
+  padding-left:0px;
+  width:auto;
+  font-weight: bold;
+  font-size: 90%;
+}
+
+.super_map_list_property ul#property_stats.list li .attribute .separator,
+.super_map_list_property ul.wpp_property_stats.list li .attribute .separator{
+  display: inline-block;
+  padding: 0 5px 0 2px;
+}
+
+
+
+ul#property_stats.list li .value,
+ul.wpp_property_stats.list li .value {
+
+}
+
+/* ** END PROPERTY STATS **
+   ================================================== */
+
+#primary .sidebar_property_thumbnail  img {
+  border: 5px solid #DFDFDF;
+  float: left;
+  margin: 0 9px 9px 0;
+  margin-top: 5px;
+}
+
+#primary .property_widget_block li p {
+  margin: 0
+}
+
+#primary  .property_widget_block ul {
+  clear: left
+}
+
+/* ===[ Properties Widgets ]=== */
+
+.wpp_child_properties_widget .property_widget_block,
+.wpp_other_properties_widget .property_widget_block,
+.wpp_latest_properties_widget .property_widget_block,
+.wpp_featured_properties_widget .property_widget_block {
+  clear: both;
+  margin-bottom: 10px;
+}
+
+.wpp_search_properties_widget ul.wpp_search_elements,
+.wpp_child_properties_widget .property_widget_block ul.wpp_widget_attribute_list,
+.wpp_other_properties_widget .property_widget_block ul.wpp_widget_attribute_list,
+.wpp_latest_properties_widget .property_widget_block ul.wpp_widget_attribute_list,
+.wpp_featured_properties_widget .property_widget_block ul.wpp_widget_attribute_list {
+  margin-left: 0px;
+  margin-right: 0;
+  padding-top: 0;
+}
+
+.wpp_child_properties_widget .property_widget_block li,
+.wpp_other_properties_widget .property_widget_block li,
+.wpp_latest_properties_widget .property_widget_block li,
+.wpp_featured_properties_widget .property_widget_block li {
+  border-bottom: 1px dashed #CDCDCD;
+  color: #434141;
+  display: block;
+  padding: 2px 0;
+  width: 100%;
+}
+
+.wpp_child_properties_widget .property_widget_block p.title,
+.wpp_other_properties_widget .property_widget_block p.title,
+.wpp_latest_properties_widget .property_widget_block p.title,
+.wpp_featured_properties_widget .property_widget_block p.title {
+  margin-bottom: 3px
+}
+
+.wpp_child_properties_widget img,
+.wpp_other_properties_widget img,
+.wpp_latest_properties_widget img,
+.wpp_featured_properties_widget img {
+  margin-right: 5px
+}
+
+.wpp_search_properties_widget .wpp_search_elements {
+  clear: both;
+  list-style-type: none;
+  margin: 0;
+}
+
+.wpp_search_properties_widget .wpp_search_elements .search_input_block {
+  float: left
+}
+
+.wpp_search_properties_widget .wpp_search_elements .search_input_block input {
+  width: 50px
+}
+
+.wpp_search_properties_widget .wpp_search_elements li {
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.wpp_search_properties_widget .wpp_search_elements li label {
+  float: left;
+  width: 85px;
+}
+
+.wpp_gallery_widget {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_gallery_widget  img.wpp_gallery_widget_image {
+  border: 5px solid #DFDFDF;
+  margin: 0 9px 9px 0;
+  max-width: 100%;
+}
+
+.wpp_gallery_widget br {
+  display: none !important
+}
+
+/* ===[ Property Overview / Listings ]=== */
+
+.wpp_row_view {
+  margin-top: 10px
+}
+
+.wpp_row_view ul.wpp_overview_data .property_phone_number {
+  background: url("images/phone_address.gif") no-repeat scroll left top transparent;
+  color: #666363;
+  font-size: 18px;
+  padding-left: 34px;
+}
+
+.wpp_row_view ul.wpp_overview_data .property_address a {
+  color: #666363;
+  display: block;
+  padding-top: 6px;
+  text-decoration: none;
+}
+
+.wpp_row_view .property_image .property_overview_thumb {
+  background: none repeat scroll 0 0 #EFEFEF;
+  color: black;
+  display: table-cell;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.wpp_row_view ul.wpp_overview_data .wpp_overview_list {
+  padding-left: 34px
+}
+
+.wpp_row_view .property_div .wpp_overview_left_column {
+  display: table-cell;
+  position: relative;
+  vertical-align: top;
+}
+
+.wpp_row_view .wpp_overview_right_column {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.wpp_row_view .wpd_floorplans_title {
+  font-size: 0.9em;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.wpp_row_view ul.wpp_overview_data {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.wpp_row_view ul.wpp_overview_data .property_address {
+  background: url("images/phone_address.gif") no-repeat scroll left -36px transparent;
+  color: #666363;
+  font-size: 15px;
+  line-height: 1.2em;
+  padding-left: 34px;
+}
+
+.wpp_row_view ul.wpp_overview_data .property_address a:hover {
+  color: orange;
+  text-decoration: underline;
+}
+
+.wpp_row_view ul.wpp_overview_data .property_tagline {
+  border-bottom: 1px solid #EFEFEF;
+  color: #525252;
+  font-size: 1em;
+  line-height: 1.2em;
+  margin-bottom: 7px;
+  padding-bottom: 15px;
+}
+
+.wpp_row_view ul.wpp_overview_data  .property_title {
+  font-size: 1.4em
+}
+
+.wpp_row_view ul.wpp_overview_data .property_price {
+  color: #666363;
+  display: block;
+  font-size: 18px;
+  height: 25px;
+  margin-top: 10px;
+  padding-left: 35px;
+  text-decoration: none;
+}
+
+.wpp_row_view ul.wpp_overview_data li {
+  margin-bottom: 7px
+}
+
+.wpp_row_view .property_image img {
+  border: 6px solid #F5F5F5;
+  width: auto;
+}
+
+.wpp_row_view  .property_title a {
+  color: #9C1209;
+  text-decoration: none;
+}
+
+.wpp_row_view .child_properties {
+  clear: both;
+  display: block;
+  margin-right: 10px;
+  padding-top: 15px;
+}
+
+.wpp_row_view .child_properties .property_child_title {
+  padding: 5px 10px 5px 5px;
+  text-align: left;
+  width: 150px;
+}
+
+.wpp_row_view .child_properties .property_child_title a {
+  color: #707070;
+  font-weight: normal;
+}
+
+.wpp_row_view .child_properties .property_child_title a:hover {
+  color: orange;
+  text-decoration: underline;
+}
+
+.wpp_row_view .child_properties table {
+  magin-top: 15px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.wpp_row_view .child_properties table td,
+.wpp_row_view .child_properties table th {
+  border-top: 1px solid #E7E7E7
+}
+
+.wpp_row_view .child_properties table * {
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_row_view .child_properties * {
+  vertical-align: middle
+}
+
+.wpp_row_view div.property_div {
+  -khtml-border-radius: 5px;
+  -khtml-box-shadow: 0px 1px 4px #C1C1C1;
+  -moz-border-radius: 5px;
+  -moz-box-shadow: 0px 1px 4px #C1C1C1;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: 0px 1px 4px #C1C1C1;
+  background: none repeat scroll 0 0 #FFFFFF;
+  margin-bottom: 10px;
+  overflow: auto;
+  padding: 1%;
+  position: relative;
+  width: 99%;
+}
+
+.wpp_row_view .stats {
+  display: none
+}
+
+/* --- Supermap ---
+   ================================================== */
+
+
+.property_in_list {
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  background: none repeat scroll 0 0 #F7F7F7;
+  border: 1px solid #E8E8E8;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  width: 96%;
+}
+
+.map_filters {
+  background: #DAE0FF;
+  display: none;
+  line-height: 12px;
+  margin-bottom: 0px;
+}
+
+.hide_filter {
+  background: #DAE0FF;
+  border: 2px ridge grey;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.super_map,
+.super_map_list {
+  height: 550px
+}
+
+.super_map_list ul.property_in_list_items {
+  font-size: 0.9em;
+  list-style-type: none;
+  margin: 5px;
+  padding: 0;
+  position: relative;
+}
+
+.super_map_list ul.property_in_list_items li.supermap_list_view_property {
+  color: #004893;
+  cursor: pointer;
+  font-size: 1em;
+  text-decoration: underline;
+}
+
+.super_map_list ul.property_in_list_items li.supermap_list_title span {
+  color: #004893;
+  cursor: pointer;
+  font-size: 1.2em;
+  text-decoration: none;
+}
+
+.super_map_list ul.property_in_list_items li.supermap_list_thumb {
+  float: left;
+  left: 5px;
+  margin-right: 10px;
+  padding-left: 0;
+  position: relative;
+  top: 5px;
+}
+
+.super_map_list ul.property_in_list_items li {
+  background: transparent;
+  display: block;
+  list-style-type: none;
+  margin-right: 6px;
+}
+
+.map_filters #search_loader,
+.super_map_list .search_loader {
+  background: url(images/ajax-loader.gif) center left no-repeat;
+  color: #888888;
+  display: none;
+  float: right;
+  font-size: 10px;
+  height: 13px;
+  margin-top: 8px;
+  padding-left: 18px;
+  right: 0;
+  top: 0;
+  width: 42px;
+}
+
+.super_map_list .map_filters li ul {
+  margin-left: 20px
+}
+
+.super_map_list .show_more {
+  background: none repeat scroll 0 0 #DAE0FF;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+}
+
+.super_map_list .show_more .search_loader {
+  display: none;
+  height: auto;
+  margin: 0;
+  margin: 5px;
+  position: absolute;
+}
+
+.super_map_list .map_filters li ul li {
+  list-style: none
+}
+
+.super_map .gmnoprint img {
+  background: none !important
+}
+
+.super_map_list select {
+  margin-bottom: 0;
+  max-width: 96%;
+}
+
+.super_map {
+  float: right;
+  width: 65%;
+}
+
+.super_map_list input {
+  margin: 5px 5px 5px 0
+}
+
+.super_map.no_sidebar {
+  width: 100%
+}
+
+.super_map img {
+  max-width: none
+}
+
+input.wpp_supermap_input_field_min,
+input.wpp_supermap_input_field_max {
+  width: 40px
+}
+
+.super_map_list {
+  float: left;
+  overflow-h: hidden;
+  overflow-y: scroll;
+  position: relative;
+  width: 35%;
+}
+
+#no_properties {
+  background: #FF737A
+}
+
+/* --- Pagination ---
+   ================================================== */
+
+
+.properties-handling {
+  position: relative
+}
+
+.properties-handling .ajax_loader {
+  background: url(images/ajax-loader.gif) center left no-repeat;
+  color: #888888;
+  display: none;
+  font-size: 10px;
+  height: 24px;
+  padding-left: 18px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 42px;
+}
+
+.properties_pagination a.nav {
+  width: 60px
+}
+
+.properties_pagination a.page_button {
+  width: 20px
+}
+
+.properties_pagination a.nav,
+.properties_pagination a.page_button {
+  -moz-border-radius: 3px;
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid #CCCCCC;
+  border-radius: 3px;
+  display: block;
+  margin-right: 6px;
+  padding: 2px 0;
+  text-align: center;
+  text-decoration: none;
+}
+
+.properties_pagination a:hover {
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1) inset;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1) inset;
+  color: #0066CC;
+}
+
+.properties_pagination a:hover.disabled,
+.properties_pagination a:hover.selected {
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.properties_pagination ul,
+.properties_sorter {
+  display: block;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+
+.properties_pagination ul li {
+  list-style: none
+}
+
+.properties_sorter select {
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid #CCCCCC;
+  margin: 0;
+}
+
+.properties_pagination a.nav,
+.properties_pagination ul li {
+  float: left
+}
+
+.properties_sorter label {
+  line-height: 23px
+}
+
+.properties_sorter label,
+.sort_by,
+.sort_order {
+  height: 24px;
+  margin-right: 6px !important;
+}
+
+.properties_pagination ul {
+  margin: 0 !important
+}
+
+.properties_pagination a.page_button.selected {
+  background-color: #e4e4e4;
+  cursor: default;
+}
+
+.properties_pagination a.nav.disabled {
+  background-color: #e4e4e4;
+  cursor: default;
+}
+
+.wpp_sortable_dropdown option {
+  margin-right: 10px
+}
+
+.sort_order {
+  cursor: pointer;
+  display: inline-block;
+  height: 23px;
+  vertical-align: bottom;
+  width: 22px;
+}
+
+.sort_order.ASC {
+  background: url(images/sort.png) -0 0 no-repeat
+}
+
+.sort_order.DESC {
+  background: url(images/sort.png) -22px 0 no-repeat
+}
+
+.nivoSlider {
+  position: relative
+}
+
+.nivoSlider a.nivo-imageLink {
+  border: 0;
+  display: none;
+  height: 100%;
+  left: 0px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  z-index: 60;
+}
+
+.nivoSlider img {
+  left: 0px;
+  position: absolute;
+  top: 0px;
+}
+
+.nivo-slice {
+  display: block;
+  height: 100%;
+  position: absolute;
+  z-index: 50;
+}
+
+.nivo-box {
+  display: block;
+  position: absolute;
+  z-index: 5;
+}
+
+.nivo-caption {
+  background: #000;
+  bottom: 0px;
+  color: #fff;
+  font-size: 2em;
+  height: 58px;
+  left: 0px;
+  opacity: 0.99;
+  padding: 4px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  z-index: 89;
+}
+
+.nivo-caption p {
+  margin: 0;
+  padding: 5px;
+}
+
+.nivo-caption a {
+  display: inline !important
+}
+
+.nivo-html-caption {
+  display: none
+}
+
+.nivo-directionNav a {
+  background: url("images/arrows.png") no-repeat scroll 0 0 transparent;
+  border: 0 none;
+  cursor: pointer;
+  display: block;
+  height: 30px;
+  position: absolute;
+  text-indent: -9999px;
+  top: 45%;
+  width: 30px;
+  z-index: 99;
+}
+
+.nivo-prevNav {
+  left: 15px
+}
+
+.nivo-directionNav a.nivo-nextNav {
+  background: url("images/arrows.png") no-repeat scroll -30px 0 transparent;
+  right: 15px;
+}
+
+.nivo-controlNav a.active {
+  background-position: -10px 0
+}
+
+.nivo-controlNav a {
+  background: url("images/bullets.png") no-repeat scroll 0 0 transparent;
+  border: 0 none;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 10px;
+  margin-right: 3px;
+  padding: 4px;
+  position: relative;
+  text-align: center;
+  text-indent: -9999px;
+  z-index: 99;
+}
+
+/* ===[ Different Specific DOM elements ]=== */
+
+.true-checkbox-image {
+  background: url("images/true-checkbox-image.png") no-repeat scroll 0 0 transparent;
+  float: left;
+  height: 15px;
+  width: 15px;
+}
+
+.wpp_supermap_attribute_row .true-checkbox-image {
+  margin-right: 3px;
+  position: relative;
+  top: 2px;
+}
+
+..wpp_attribute .true-checkbox-image {
+  position: relative;
+  top: 3px;
+}
+
+/* ===[ Global Slideshow Begin ]=== */
+
+.wpp_slideshow_global_wrapper {
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+}
+
+/* ===[ Global Slideshow End ]=== */
+
+.wpp_slideshow_global_wrapper .nivo-caption span {
+  display: block;
+  font-size: 0.5em;
+}
+
+.wpp_feps_map img {
+  max-width: none !important;
+}
+
+.wpp_feps_subscription_plan_list {
+  margin: 0;
+}
+
+.wpp_feps_subscription_plan {
+  list-style: none;
+}
+
+.wpp_feps_subscription_plan_title {
+  font-size: 1.1em !important;
+  font-weight: bold;
+  letter-spacing: 0 !important;
+  line-height: 1.1em !important;
+  margin: 0 !important;
+}
+
+.wpp_feps_subscription_plan_description {
+  font-size: 0.7em;
+  margin: 0 !important;
+}
+
+.wpp_feps_subscription_plan_info, .wpp_feps_subscription_plan_info li {
+  margin: 0;
+  padding: 0;
+}
+
+.wpp_feps_pay_now {
+  font-size: 0.9em;
+  padding: 10px !important;
+  vertical-align: top;
+}
+
+/* ===[ TwentyTen Specific ]=== */

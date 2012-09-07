@@ -1,0 +1,39 @@
+span.checkbox, span.radio {
+	width: 20px;
+	height: 20px;
+	padding: 0 5px 0 0;
+	background: url(checkbox.png) no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+  margin-top: 8px;
+}
+span.radio {
+	background: url(radio.png) no-repeat;
+}
+span.select {
+	position: absolute;
+	width: 90%; /* With the padding included, the width is 190 pixels: the actual width of the image. */
+	height: 30px;
+	padding: 0 24px 0 8px;
+	font: 14px/29px arial,sans-serif;
+	/*background: url(select.png) no-repeat;*/
+  background: -moz-linear-gradient(center top , #FCFCFC, #EAEAEA 14px, #CACACA 30px) repeat scroll 0 0 transparent;
+  border: 3px solid #ACACAC;
+  border: 1px solid #B7BBC2;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 0 3px #888888 inset;
+	overflow: hidden;
+}
+
+form input[type="text"], input[type="url"],
+input[type="email"], input[type="tel"], textarea, select {
+    margin: 3px 0 0 0;
+    padding: 6px;
+    width: 260px;
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    background: -webkit-gradient(linear, left top, left 15, from(#FFFFFF), color-stop(4%, #f4f4f4), to(#FFFFFF));
+    background: -moz-linear-gradient(top, #FFFFFF, #f4f4f4 1px, #FFFFFF 15px);
+}
