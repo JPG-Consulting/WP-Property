@@ -78,7 +78,7 @@ class WPP_Core {
     do_action('wpp_init');
 
     //** Load languages */
-    load_plugin_textdomain('wpp', WPP_Path . false, 'wp-property/langs');
+    load_plugin_textdomain('wpp', WPP_Path, 'wp-property/langs');
 
     /** Making template-functions global but load after the premium features, giving the premium features priority. */
     include_once WPP_Templates . '/template-functions.php';
