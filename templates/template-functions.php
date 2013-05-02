@@ -134,7 +134,7 @@ if(!function_exists('property_overview_image')) {
       ob_start();
       ?>
       <div class="property_image">
-        <a href="<?php echo $thumbnail_link; ?>" title="<?php echo $property['post_title'] . ($property['parent_title'] ? __(' of ', 'wpp') . $property['parent_title'] : "");?>"  class="property_overview_thumb property_overview_thumb_<?php echo $thumbnail_size; ?> <?php echo $link_class; ?>" rel="properties" >
+        <a href="<?php echo $thumbnail_link; ?>" title="<?php echo $property['post_title'] . ($property['parent_title'] ? __(' of ', 'wpp') . $property['parent_title'] : "");?>"  class="property_overview_thumb property_overview_thumb_<?php echo $thumbnail_size; ?> <?php echo $link_class; ?> thumbnail" rel="properties" >
           <img width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" src="<?php echo $image['link']; ?>" alt="<?php echo $property['post_title'];?>" />
         </a>
       </div>
@@ -195,6 +195,16 @@ if(!function_exists('wpi_draw_pagination')):
   function wpi_draw_pagination($settings = '') {
     global $wpp_query, $wp_properties;
 
+    $settings = wp_parse_args( $settings, array(
+      'javascript' => true,
+      'return' => true,
+      'class' => '',
+      'sorter_type' => 'none',
+      'hide_count' => false,
+      'sort_by_text' => isset( $wpp_query['sort_by_text'] ) ? $wpp_query['sort_by_text'] : '',
+      'javascript' => true
+    ) );
+
     if(is_array($wpp_query) || is_object($wpp_query)) {
       extract($wpp_query);
     }
@@ -215,202 +225,204 @@ if(!function_exists('wpi_draw_pagination')):
       $sortable_attrs = false;
     }
 
-    ob_start(); ?>
-    <script type="text/javascript">
-      /*
-       * The functionality below is used for pagination and sorting the list of properties
-       * It can be called twice (for top and bottom pagination blocks)
-       * or more times (on multiple shortcodes)
-       * So the current javascript functionality should not to be initialized twice.
-       */
-      /*
-       * Init global WPP_QUERY variable which will contain all query objects
-       */
-      if(typeof wpp_query == 'undefined') {
-        var wpp_query = [];
-      }
-      /*
-       *
-       */
-      if(typeof document_ready == 'undefined') {
-          var document_ready = false;
-      }
-      /*
-       * Initialize shortcode's wpp_query object
-       */
-      if(typeof wpp_query_<?php echo $unique_hash; ?> == 'undefined') {
-        var wpp_query_<?php echo $unique_hash; ?> = <?php echo json_encode($wpp_query); ?>;
-        /* Default values for ajax query. It's used when we go to base URL using back button */
-        wpp_query_<?php echo $unique_hash; ?>['default_query'] = wpp_query_<?php echo $unique_hash; ?>.query;
-        /* Push query objects to global wpp_query variable */
-        wpp_query.push(wpp_query_<?php echo $unique_hash; ?>);
-      }
-      /*
-       * Init variable only at once
-       */
-      if(typeof wpp_pagination_history_ran == 'undefined') {
-        var wpp_pagination_history_ran = false;
-      }
-      /* Init variable only at once */
-      if(typeof wpp_pagination_<?php echo $unique_hash; ?> == 'undefined') {
-        var wpp_pagination_<?php echo $unique_hash; ?> = false;
-      }
-      if(typeof first_load == 'undefined') {
-        var first_load = true;
-      }
-      /* Watch for address URL for back buttons support */
-      if(!wpp_pagination_history_ran) {
-        wpp_pagination_history_ran = true;
+    //** */
+    if ( $settings[ 'javascript' ] ) {
+
+      ob_start(); ?>
+      <script type="text/javascript">
         /*
-         * On change location (address) Event.
-         *
-         * Also used as Back button functionality.
-         *
-         * Attention! This event is unique (binds at once) and is used for any (multiple) shortcode
+         * The functionality below is used for pagination and sorting the list of properties
+         * It can be many times (on multiple shortcodes)
+         * So the current javascript functionality should not to be initialized twice.
          */
-         jQuery(document).ready(function() {
-          if(!jQuery.isFunction(jQuery.fn.slider)) {
-            return;
-          }
-          jQuery.address.change(function(event){
-            callPagination(event);
-          });
-        });
         /*
-         * Parse location (address) hash,
-         * Setup shortcode params by hash params
-         * Calls ajax pagination
+         * Init global WPP_QUERY variable which will contain all query objects
          */
-        function callPagination(event) {
+        if(typeof wpp_query == 'undefined') {
+          var wpp_query = [];
+        }
+        /*
+         *
+         */
+        if(typeof document_ready == 'undefined') {
+            var document_ready = false;
+        }
+        /*
+         * Initialize shortcode's wpp_query object
+         */
+        if(typeof wpp_query_<?php echo $unique_hash; ?> == 'undefined') {
+          var wpp_query_<?php echo $unique_hash; ?> = <?php echo json_encode($wpp_query); ?>;
+          /* Default values for ajax query. It's used when we go to base URL using back button */
+          wpp_query_<?php echo $unique_hash; ?>['default_query'] = wpp_query_<?php echo $unique_hash; ?>.query;
+          /* Push query objects to global wpp_query variable */
+          wpp_query.push(wpp_query_<?php echo $unique_hash; ?>);
+        }
+        /*
+         * Init variable only at once
+         */
+        if(typeof wpp_pagination_history_ran == 'undefined') {
+          var wpp_pagination_history_ran = false;
+        }
+        /* Init variable only at once */
+        if(typeof wpp_pagination_<?php echo $unique_hash; ?> == 'undefined') {
+          var wpp_pagination_<?php echo $unique_hash; ?> = false;
+        }
+        if(typeof first_load == 'undefined') {
+          var first_load = true;
+        }
+        /* Watch for address URL for back buttons support */
+        if(!wpp_pagination_history_ran) {
+          wpp_pagination_history_ran = true;
           /*
-           * We have to be sure that DOM is ready
-           * if it's not, wait 0.1 sec and call function again
+           * On change location (address) Event.
+           *
+           * Also used as Back button functionality.
+           *
+           * Attention! This event is unique (binds at once) and is used for any (multiple) shortcode
            */
-          if(!document_ready) {
-            window.setTimeout(function(){
-              callPagination(event);
-            }, 100);
-            return false;
-          }
-          var history = {};
-          /* Parse hash value (params) */
-          var hashes = event.value.replace(/^\//, '');
-          /* Determine if we have hash params */
-          if(hashes) {
-            hashes = hashes.split('&');
-            for (var i in hashes) {
-              if(typeof hashes[i] != 'function') {
-                hash = hashes[i].split('=');
-                history[hash[0]] = hash[1];
-              }
+           jQuery(document).ready(function() {
+            if(!jQuery.isFunction(jQuery.fn.slider)) {
+              return;
             }
-            if(history.i) {
-              /* get current shortcode's object */
-              var index = parseInt(history.i) - 1;
-              if(index >= 0) {
-                var q = wpp_query[index];
-              }
-              if(typeof q == 'undefined' || q.length == 0) {
-                //ERROR
-                return false;
-              }
-              if(history.sort_by && history.sort_by != '') {
-                q.sort_by = history.sort_by;
-              }
-              if(history.sort_order  && history.sort_order != '') {
-                q.sort_order = history.sort_order;
-              }
-              /* 'Select/Unselect' sortable buttons */
-              var sortable_links = jQuery('#wpp_shortcode_' + q.unique_hash + ' .wpp_sortable_link');
-              if(sortable_links.length > 0 ) {
-                sortable_links.each(function(i,e){
-                  jQuery(e).removeClass("wpp_sorted_element");
-                  if(jQuery(e).attr('sort_slug') == q.sort_by) {
-                    jQuery(e).addClass("wpp_sorted_element");
-                  }
-                });
-              }
-              if(history.requested_page && history.requested_page != '') {
-                eval('wpp_do_ajax_pagination_' + q.unique_hash + '(' + history.requested_page + ')');
-              } else {
-                eval('wpp_do_ajax_pagination_' + q.unique_hash + '(1)');
-              }
-            } else {
+            jQuery.address.change(function(event){
+              callPagination(event);
+            });
+          });
+          /*
+           * Parse location (address) hash,
+           * Setup shortcode params by hash params
+           * Calls ajax pagination
+           */
+          function callPagination(event) {
+            /*
+             * We have to be sure that DOM is ready
+             * if it's not, wait 0.1 sec and call function again
+             */
+            if(!document_ready) {
+              window.setTimeout(function(){
+                callPagination(event);
+              }, 100);
               return false;
             }
-          } else {
-            /* Looks like it's base url
-             * Determine if this first load, we do nothing
-             * If not, - we use 'back button' functionality.
-             */
-            if(first_load) {
-              first_load = false;
-            } else {
-              /*
-               * Set default pagination values for all shortcodes
-               */
-              for(var i in wpp_query) {
-                wpp_query[i].sort_by = wpp_query[i].default_query.sort_by;
-                wpp_query[i].sort_order = wpp_query[i].default_query.sort_order;
+            var history = {};
+            /* Parse hash value (params) */
+            var hashes = event.value.replace(/^\//, '');
+            /* Determine if we have hash params */
+            if(hashes) {
+              hashes = hashes.split('&');
+              for (var i in hashes) {
+                if(typeof hashes[i] != 'function') {
+                  hash = hashes[i].split('=');
+                  history[hash[0]] = hash[1];
+                }
+              }
+              if(history.i) {
+                /* get current shortcode's object */
+                var index = parseInt(history.i) - 1;
+                if(index >= 0) {
+                  var q = wpp_query[index];
+                }
+                if(typeof q == 'undefined' || q.length == 0) {
+                  //ERROR
+                  return false;
+                }
+                if(history.sort_by && history.sort_by != '') {
+                  q.sort_by = history.sort_by;
+                }
+                if(history.sort_order  && history.sort_order != '') {
+                  q.sort_order = history.sort_order;
+                }
                 /* 'Select/Unselect' sortable buttons */
-                var sortable_links = jQuery('#wpp_shortcode_' + wpp_query[i].unique_hash + ' .wpp_sortable_link');
+                var sortable_links = jQuery('#wpp_shortcode_' + q.unique_hash + ' .wpp_sortable_link');
                 if(sortable_links.length > 0 ) {
-                  sortable_links.each(function(ie,e){
+                  sortable_links.each(function(i,e){
                     jQuery(e).removeClass("wpp_sorted_element");
-                    if(jQuery(e).attr('sort_slug') == wpp_query[i].sort_by) {
+                    if(jQuery(e).attr('sort_slug') == q.sort_by) {
                       jQuery(e).addClass("wpp_sorted_element");
                     }
                   });
                 }
-                eval('wpp_do_ajax_pagination_' + wpp_query[i].unique_hash + '(1, false)');
+                if(history.requested_page && history.requested_page != '') {
+                  eval('wpp_do_ajax_pagination_' + q.unique_hash + '(' + history.requested_page + ')');
+                } else {
+                  eval('wpp_do_ajax_pagination_' + q.unique_hash + '(1)');
+                }
+              } else {
+                return false;
+              }
+            } else {
+              /* Looks like it's base url
+               * Determine if this first load, we do nothing
+               * If not, - we use 'back button' functionality.
+               */
+              if(first_load) {
+                first_load = false;
+              } else {
+                /*
+                 * Set default pagination values for all shortcodes
+                 */
+                for(var i in wpp_query) {
+                  wpp_query[i].sort_by = wpp_query[i].default_query.sort_by;
+                  wpp_query[i].sort_order = wpp_query[i].default_query.sort_order;
+                  /* 'Select/Unselect' sortable buttons */
+                  var sortable_links = jQuery('#wpp_shortcode_' + wpp_query[i].unique_hash + ' .wpp_sortable_link');
+                  if(sortable_links.length > 0 ) {
+                    sortable_links.each(function(ie,e){
+                      jQuery(e).removeClass("wpp_sorted_element");
+                      if(jQuery(e).attr('sort_slug') == wpp_query[i].sort_by) {
+                        jQuery(e).addClass("wpp_sorted_element");
+                      }
+                    });
+                  }
+                  eval('wpp_do_ajax_pagination_' + wpp_query[i].unique_hash + '(1, false)');
+                }
               }
             }
           }
         }
-      }
-      /*
-       * Changes location (address) hash based on pagination
-       *
-       * We use this function extend of wpp_do_ajax_pagination()
-       * because wpp_do_ajax_pagination() is called on change Address Value's event
-       *
-       * @param int this_page Page which will be loaded
-       * @param object data WPP_QUERY object
-       * @return object data Returns updated WPP_QUERY object
-       */
-      if(typeof changeAddressValue == 'undefined' ) {
-        function changeAddressValue (this_page, data) {
-          var q = window.wpp_query;
-          /* Get the current shortcode's index */
-          var index = 0;
-          for (var i in q) {
-            if(q[i].unique_hash == data.unique_hash) {
-              index = (++i);
-              break;
+        /*
+         * Changes location (address) hash based on pagination
+         *
+         * We use this function extend of wpp_do_ajax_pagination()
+         * because wpp_do_ajax_pagination() is called on change Address Value's event
+         *
+         * @param int this_page Page which will be loaded
+         * @param object data WPP_QUERY object
+         * @return object data Returns updated WPP_QUERY object
+         */
+        if(typeof changeAddressValue == 'undefined' ) {
+          function changeAddressValue (this_page, data) {
+            var q = window.wpp_query;
+            /* Get the current shortcode's index */
+            var index = 0;
+            for (var i in q) {
+              if(q[i].unique_hash == data.unique_hash) {
+                index = (++i);
+                break;
+              }
             }
+            /* Set data query which will be used in history hash below */
+            var q = {
+              requested_page : this_page,
+              sort_order : data.sort_order,
+              sort_by : data.sort_by,
+              i : index
+            };
+            /* Update WPP_QUERY query */
+            data.query.requested_page = this_page;
+            data.query.sort_order = data.sort_order;
+            data.query.sort_by = data.sort_by;
+            /*
+             * Update page URL for back-button support (needs to do sort order and direction)
+             * jQuery.address.value() and jQuery.address.path() double binds jQuery.change() event, some way
+             * so for now, we use window.location
+             */
+            var history = jQuery.param(q);
+            window.location.hash = '/' + history;
+            return data;
           }
-          /* Set data query which will be used in history hash below */
-          var q = {
-            requested_page : this_page,
-            sort_order : data.sort_order,
-            sort_by : data.sort_by,
-            i : index
-          };
-          /* Update WPP_QUERY query */
-          data.query.requested_page = this_page;
-          data.query.sort_order = data.sort_order;
-          data.query.sort_by = data.sort_by;
-          /*
-           * Update page URL for back-button support (needs to do sort order and direction)
-           * jQuery.address.value() and jQuery.address.path() double binds jQuery.change() event, some way
-           * so for now, we use window.location
-           */
-          var history = jQuery.param(q);
-          window.location.hash = '/' + history;
-          return data;
         }
-      }
-      if(typeof wpp_do_ajax_pagination_<?php echo $unique_hash; ?> == 'undefined') {
+
         function wpp_do_ajax_pagination_<?php echo $unique_hash; ?>(this_page, scroll_to) {
           if(typeof this_page == 'undefined') {
             this_page = 1;
@@ -418,6 +430,7 @@ if(!function_exists('wpi_draw_pagination')):
           if(typeof scroll_to == 'undefined') {
             scroll_to = true;
           }
+
           data = wpp_query_<?php echo $unique_hash; ?>;
           /* Update page counter */
           jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_current_page_count").text(this_page);
@@ -472,98 +485,91 @@ if(!function_exists('wpi_draw_pagination')):
             "json"
           );
         }
-      }
-      jQuery(document).ready(function() {
-        if(!jQuery.isFunction(jQuery.fn.slider)) {
-          /* console.log("jQuery.slider not loaded."); */
-        }
-        if(!jQuery.isFunction(jQuery.fn.address)) {
-          /* console.log("jQuery.address not loaded."); */
-        }
-        if(!jQuery.isFunction(jQuery.fn.slider) || !jQuery.isFunction(jQuery.fn.slider)) {
-          jQuery(".wpp_pagination_slider_wrapper").hide();
-          return;
-        }
-        document_ready = true;
-        max_slider_pos = <?php echo ($pages ? $pages : 'null'); ?>;
-        //** Do not assign click event again */
-        if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_back').data('events') ) {
-          jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_back').click(function() {
-            var current_value =  jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value");
-            if(current_value == 1) { return; }
-            var new_value = current_value - 1;
-            jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value", new_value);
-            wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(new_value, wpp_query_<?php echo $unique_hash; ?>);
-          });
-        }
-        if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_forward').data('events') ) {
-          jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_forward').click(function() {
-            var current_value =  jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value");
-            if(max_slider_pos && (current_value == max_slider_pos || max_slider_pos < 1 )) { return; }
-            var new_value = current_value + 1;
-            jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value",new_value);
-            wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(new_value, wpp_query_<?php echo $unique_hash; ?>);
-          });
-        }
-        if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link').data('events') ) {
-          jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link').click(function() {
-            var attribute = jQuery(this).attr('sort_slug');
-            var sort_order = jQuery(this).attr('sort_order');
-            var this_attribute = jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link[sort_slug="+attribute+"]");
-            if(jQuery(this).is(".wpp_sorted_element")) {
-              var currently_sorted = true;
+
+        jQuery(document).ready(function() {
+          if(!jQuery.isFunction(jQuery.fn.slider) || !jQuery.isFunction(jQuery.fn.slider)) {
+            jQuery(".wpp_pagination_slider_wrapper").hide();
+            return null;
+          }
+          document_ready = true;
+          max_slider_pos = <?php echo ($pages ? $pages : 'null'); ?>;
+          //** Do not assign click event again */
+          if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_back').data('events') ) {
+            jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_back').click(function() {
+              var current_value =  jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value");
+              if(current_value == 1) { return; }
+              var new_value = current_value - 1;
+              jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value", new_value);
+              wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(new_value, wpp_query_<?php echo $unique_hash; ?>);
+            });
+          }
+          if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_forward').data('events') ) {
+            jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_forward').click(function() {
+              var current_value =  jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value");
+              if(max_slider_pos && (current_value == max_slider_pos || max_slider_pos < 1 )) { return; }
+              var new_value = current_value + 1;
+              jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider").slider("value",new_value);
+              wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(new_value, wpp_query_<?php echo $unique_hash; ?>);
+            });
+          }
+          if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link').data('events') ) {
+            jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link').click(function() {
+              var attribute = jQuery(this).attr('sort_slug');
+              var sort_order = jQuery(this).attr('sort_order');
+              var this_attribute = jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link[sort_slug="+attribute+"]");
+              if(jQuery(this).is(".wpp_sorted_element")) {
+                var currently_sorted = true;
+                /* If this attribute is already sorted, we switch sort order */
+                if(sort_order == "ASC") {
+                  sort_order = "DESC";
+                } else if(sort_order == "DESC") {
+                  sort_order = "ASC";
+                }
+              }
+              jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link").removeClass("wpp_sorted_element");
+              wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
+              wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
+              jQuery(this_attribute).addClass("wpp_sorted_element");
+              jQuery(this_attribute).attr("sort_order", sort_order);
+              /* Get ajax results and reset to first page */
+              wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
+            });
+          }
+          if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_dropdown').data('events') ) {
+            jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_dropdown').change(function() {
+              var parent = jQuery(this).parents('.wpp_sorter_options');
+              var attribute = jQuery(":selected", this).attr('sort_slug');
+              var sort_element = jQuery(".sort_order", parent);
+              var sort_order = jQuery(sort_element).attr('sort_order');
+              wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
+              wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
+              /* Get ajax results and reset to first page */
+              wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
+            });
+          }
+          if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_overview_sorter').data('events') ) {
+            jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_overview_sorter').click(function() {
+              var parent = jQuery(this).parents('.wpp_sorter_options');
+              var sort_element = this;
+              var dropdown_element = jQuery(".wpp_sortable_dropdown", parent);
+              var attribute = jQuery(":selected", dropdown_element).attr('sort_slug');
+              var sort_order = jQuery(sort_element).attr('sort_order');
+              jQuery(sort_element).removeClass(sort_order);
               /* If this attribute is already sorted, we switch sort order */
               if(sort_order == "ASC") {
                 sort_order = "DESC";
               } else if(sort_order == "DESC") {
                 sort_order = "ASC";
               }
-            }
-            jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_link").removeClass("wpp_sorted_element");
-            wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
-            wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
-            jQuery(this_attribute).addClass("wpp_sorted_element");
-            jQuery(this_attribute).attr("sort_order", sort_order);
-            /* Get ajax results and reset to first page */
-            wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
-          });
-        }
-        if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_dropdown').data('events') ) {
-          jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_sortable_dropdown').change(function() {
-            var parent = jQuery(this).parents('.wpp_sorter_options');
-            var attribute = jQuery(":selected", this).attr('sort_slug');
-            var sort_element = jQuery(".sort_order", parent);
-            var sort_order = jQuery(sort_element).attr('sort_order');
-            wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
-            wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
-            /* Get ajax results and reset to first page */
-            wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
-          });
-        }
-        if(!jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_overview_sorter').data('events') ) {
-          jQuery('#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_overview_sorter').click(function() {
-            var parent = jQuery(this).parents('.wpp_sorter_options');
-            var sort_element = this;
-            var dropdown_element = jQuery(".wpp_sortable_dropdown", parent);
-            var attribute = jQuery(":selected", dropdown_element).attr('sort_slug');
-            var sort_order = jQuery(sort_element).attr('sort_order');
-            jQuery(sort_element).removeClass(sort_order);
-            /* If this attribute is already sorted, we switch sort order */
-            if(sort_order == "ASC") {
-              sort_order = "DESC";
-            } else if(sort_order == "DESC") {
-              sort_order = "ASC";
-            }
-            wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
-            wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
-            jQuery(sort_element).attr("sort_order", sort_order);
-            jQuery(sort_element).addClass(sort_order);
-            /* Get ajax results and reset to first page */
-            wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
-          });
-        }
-        <?php if($use_pagination) { ?>
-        if(!wpp_pagination_<?php echo $unique_hash; ?>) {
+              wpp_query_<?php echo $unique_hash; ?>.sort_by = attribute;
+              wpp_query_<?php echo $unique_hash; ?>.sort_order = sort_order;
+              jQuery(sort_element).attr("sort_order", sort_order);
+              jQuery(sort_element).addClass(sort_order);
+              /* Get ajax results and reset to first page */
+              wpp_query_<?php echo $unique_hash; ?> = changeAddressValue(1, wpp_query_<?php echo $unique_hash; ?>);
+            });
+          }
+          <?php if($use_pagination) { ?>
           jQuery("#wpp_shortcode_<?php echo $unique_hash; ?> .wpp_pagination_slider_wrapper").each(function() {
             var this_parent = this;
             /* Slider */
@@ -590,39 +596,42 @@ if(!function_exists('wpi_draw_pagination')):
             jQuery('.wpp_pagination_slider .ui-slider-handle', this).append('<div class="slider_page_info"><div class="val">1</div><div class="arrow"></div></div>');
 
           });
-          wpp_pagination_<?php echo $unique_hash; ?> = true;
-        }
-        <?php } ?>
-      });
-    </script>
-    <?php
+          <?php } ?>
+        });
 
-    $js_result = ob_get_contents();
-    ob_end_clean();
+      </script>
+      <?php
+
+      $js_result = ob_get_contents();
+      ob_end_clean();
+
+    }
 
     ob_start(); ?>
     <div class="properties_pagination <?php echo $settings['class']; ?> wpp_slider_pagination" id="properties_pagination_<?php echo $unique_hash; ?>">
       <div class="wpp_pagination_slider_status">
-        <?php if($hide_count != 'true') { ?>
-          <span class="wpp_property_results"><?php echo ($properties['total'] > 0 ? WPP_F::format_numeric($properties['total']) : __('None', 'wpp')); ?></span>
-          <?php _e(' found.', 'wpp'); ?>
-        <?php } ?>
-        <?php if($use_pagination) { ?>
-        <?php _e('Viewing page', 'wpp'); ?> <span class="wpp_current_page_count">1</span> <?php _e('of', 'wpp'); ?> <span class="wpp_total_page_count"><?php echo $pages; ?></span>.
-        <?php } ?>
+        <span class="wpp_property_results_options">
+          <?php if($hide_count != 'true') { ?>
+            <span class="wpp_property_results"><?php echo ($properties['total'] > 0 ? WPP_F::format_numeric($properties['total']) : __('None', 'wpp')); ?></span>
+            <?php _e(' found.', 'wpp'); ?>
+          <?php } ?>
+          <?php if($use_pagination) { ?>
+          <?php _e('Viewing page', 'wpp'); ?> <span class="wpp_current_page_count">1</span> <?php _e('of', 'wpp'); ?> <span class="wpp_total_page_count"><?php echo $pages; ?></span>.
+          <?php } ?>
+        </span>
         <?php if($sortable_attrs) { ?>
-        <span class="wpp_sorter_options"><label  class="wpp_sort_by_text"><?php echo $settings['sort_by_text']; ?></label>
+        <span class="wpp_sorter_options"><span  class="wpp_sort_by_text"><?php echo $settings['sort_by_text']; ?></span>
         <?php
         if($settings['sorter_type'] == 'buttons') { ?>
         <?php foreach($sortable_attrs as $slug => $label) { ?>
-          <span class="wpp_sortable_link <?php echo ($sort_by == $slug ? 'wpp_sorted_element':''); ?>" sort_order="<?php echo $sort_order ?>" sort_slug="<?php echo $slug; ?>"><?php echo $label; ?></span>
+          <span class="wpp_sortable_link <?php echo ($sort_by == $slug ? 'wpp_sorted_element':''); ?> label label-info" sort_order="<?php echo $sort_order ?>" sort_slug="<?php echo $slug; ?>"><?php echo $label; ?></span>
         <?php } } elseif($settings['sorter_type'] == 'dropdown') { ?>
-        <select class="wpp_sortable_dropdown sort_by" name="sort_by">
+        <select class="wpp_sortable_dropdown sort_by label-info" name="sort_by">
         <?php foreach($sortable_attrs as $slug => $label) { ?>
           <option <?php echo ($sort_by == $slug ? 'class="wpp_sorted_element" selected="true"':''); ?> sort_slug="<?php echo $slug; ?>" value="<?php echo $slug; ?>"><?php echo $label; ?></option>
         <?php } ?>
         </select>
-        <span class="wpp_overview_sorter sort_order <?php echo $sort_order ?>" sort_order="<?php echo $sort_order ?>"></span>
+        <?php /* <span class="wpp_overview_sorter sort_order <?php echo $sort_order ?> label label-info" sort_order="<?php echo $sort_order ?>"></span> */ ?>
         <?php } else {
           do_action('wpp_custom_sorter', array('settings' => $settings, 'wpp_query' => $wpp_query, 'sorter_type' => $settings['sorter_type']));
         }
@@ -641,12 +650,14 @@ if(!function_exists('wpi_draw_pagination')):
     </div>
     <div class="ajax_loader"></div>
     <?php
-    $html_result = ob_get_contents();
+    $result = ob_get_contents();
     ob_end_clean();
 
     //** Combine JS (after minification) with HTML results */
-    $js_result = WPP_F::minify_js($js_result);
-    $result = $js_result . $html_result;
+    if( $settings[ 'javascript' ] && isset( $js_result ) ) {
+      $js_result = WPP_F::minify_js($js_result);
+      $result = $js_result . $result;
+    }
 
     if($settings['return'] == 'true') {
       return $result;
@@ -693,9 +704,7 @@ if(!function_exists('prepare_property_for_display')):
     }
 
     /* Used to apply different filters depending on where the attribute is displayed. i.e. google_map_infobox  */
-    if($args['scope']) {
-      $attribute_scope = $args['scope'];
-    }
+    $attribute_scope = (!empty($args['scope'])) ? $args['scope'] : false;
 
     $return_type = (is_object($property) ? 'object' : 'array');
 
@@ -742,11 +751,11 @@ if(!function_exists('prepare_property_for_display')):
       //** Only executed shortcodes if the value isn't an array */
       if(!is_array($attribute_value)) {
 
-        if($args['do_not_execute_shortcodes'] == 'true' || $meta_key == 'post_content') {
+        if( (!empty($args['do_not_execute_shortcodes']) && $args['do_not_execute_shortcodes'] == 'true') || $meta_key == 'post_content') {
           continue;
         }
 
-        $attribute_value = do_shortcode("{$attribute_value}");
+        $attribute_value = do_shortcode(html_entity_decode($attribute_value));
 
         $attribute_value = str_replace("\n", "", nl2br($attribute_value));
 
@@ -819,21 +828,21 @@ endif;
 if(!function_exists('the_tagline')):
    function the_tagline($before = '', $after = '', $echo = true) {
     global $post;
-    
+
     $content = $post->tagline;
-    
+
     if ( strlen($content) == 0 ) {
       return;
     }
-      
+
     $content = $before . $content . $after;
-    
+
     if ( $echo ) {
       echo $content;
     } else {
       return $content;
     }
-    
+
   }
 endif;
 
@@ -894,21 +903,44 @@ if(!function_exists('draw_stats')):
       $property = (object)$property;
     }
 
+    $property = prepare_property_for_display($property);
+    
     $defaults = array(
       'sort_by_groups' => $wp_properties['configuration']['property_overview']['sort_stats_by_groups'],
       'display' => 'dl_list',
-      'show_true_as_image' => 'false',
+      'show_true_as_image' => $wp_properties['configuration']['property_overview']['show_true_as_image'],
       'make_link' => 'true',
-      'hide_false' => 'false'
+      'hide_false' => 'false',
+      'first_alt' => 'false',
+      'return_blank' => 'false',
+      //** Args below are related to WPP 2.0. but it's needed to have the compatibility with new Denali versions */
+      'include_clsf' => 'all', // The list of classifications separated by commas or array which should be included. Enabled values: all|[classification,classification2]
+      'title' => 'true',
     );
 
     extract( wp_parse_args( $args, $defaults ), EXTR_SKIP );
 
-    $property_stats = WPP_F::get_stat_values_and_labels($property, $args);
-
+    $property_stats = array();
     $groups = $wp_properties['property_groups'];
 
-    if(!$property_stats) {
+    /**
+     * Determine if we should draw meta data.
+     * The functionality below is related to WPP2.0
+     * Now it just adds compatibility with new Denali versions
+     */
+    if( $include_clsf == 'detail' ) {
+      $sort_by_groups = 'false';
+      foreach( (array)$wp_properties['property_meta'] as $k => $v  ) {
+        if( empty( $property->$k ) || $k == 'tagline' ) {
+          continue;
+        }
+        $property_stats[ $k ] = $v;
+      }
+    } else {
+      $property_stats = WPP_F::get_stat_values_and_labels($property, $args);
+    }
+
+    if( empty( $property_stats ) ) {
       return;
     }
 
@@ -944,13 +976,16 @@ if(!function_exists('draw_stats')):
       $value = html_entity_decode($value);
 
       //** Single "true" is converted to 1 by get_properties() we check 1 as well, as long as it isn't a numeric attribute */
-      if($value == 'true' || (!$attribute_data['numeric'] && $value == 1)){
+      if( (  $attribute_data['data_input_type']=='checkbox' && ($value == 'true' || $value == 1) ) )
+      {
         if($show_true_as_image == 'true') {
           $value = '<div class="true-checkbox-image"></div>';
         } else {
           $value = __('Yes', 'wpp');
         }
       } else if ($value == 'false') {
+        if($wp_properties['configuration']['property_overview']['show_true_as_image']=='true')
+          continue;
         $value = __('No', 'wpp');
       }
 
@@ -960,32 +995,38 @@ if(!function_exists('draw_stats')):
         $value = "<a href='{$value}' title='{$label}'>{$value}</a>";
       }
 
-      $stats[$attribute_label] = $value;
+      //* Make emails into clickable links */
+      if($make_link == 'true' && WPP_F::is_email($value)) {
+        $value = "<a href='mailto:{$value}'>{$value}</a>";
+      }
+
+      $stats[$attribute_label]= $value;
     }
 
     if($display == 'array') {
       return $stats;
     }
 
+    $alt = $first_alt == 'true' ? "" : "alt";
+
     //** Disable regular list if groups are NOT enabled, or if groups is not an array */
     if($sort_by_groups != 'true' || !is_array($groups)) {
 
-      $alt = 'alt';
-
       foreach ($stats as $label => $value) {
         $tag = $labels_to_keys[$label];
-        $alt = $alt == "alt" ? "" : "alt";
+
+        $alt = ($alt == "alt") ? "" : "alt";
         switch($display) {
           case 'dl_list':
             ?>
-            <dt class="wpp_stat_dt_<?php echo $tag; ?>"><?php echo $label; ?></dt>
+            <dt class="wpp_stat_dt_<?php echo $tag; ?>"><?php echo $label; ?><span class="wpp_colon">:</span></dt>
             <dd class="wpp_stat_dd_<?php echo $tag; ?> <?php echo $alt; ?>"><?php echo $value; ?>&nbsp;</dd>
             <?php
             break;
           case 'list':
             ?>
             <li class="wpp_stat_plain_list_<?php echo $tag; ?> <?php echo $alt; ?>">
-              <span class="attribute"><?php echo $label; ?>:</span>
+              <span class="attribute"><?php echo $label; ?><span class="wpp_colon">:</span></span>
               <span class="value"><?php echo $value; ?>&nbsp;</span>
             </li>
             <?php
@@ -997,6 +1038,12 @@ if(!function_exists('draw_stats')):
             <br />
             <?php
             break;
+          case 'detail':
+            ?>
+            <h4 class="wpp_attribute"><?php echo $label; ?><span class="separator">:</span></h4>
+            <p class="value"><?php echo $value; ?>&nbsp;</p>
+            <?php
+            break;
         }
       }
     } else {
@@ -1006,22 +1053,25 @@ if(!function_exists('draw_stats')):
       $labels_to_keys = array_flip($wp_properties['property_stats']);
 
       foreach($stats_by_groups as $gslug => $gstats) {
-
+        ?>
+        <div class="wpp_feature_list">
+        <?php
         if($main_stats_group != $gslug || !@key_exists($gslug, $groups)) {
           $group_name = ( @key_exists($gslug, $groups) ? $groups[$gslug]['name'] : __('Other','wpp') );
           ?>
-          <span class="wpp_stats_group"><?php echo $group_name; ?></span>
+          <h2 class="wpp_stats_group"><?php echo $group_name; ?></h2>
           <?php
         }
 
-        $alt = 'alt';
         switch($display) {
           case 'dl_list':
             ?>
-            <dl id="property_stats" class="property_stats overview_stats">
+            <dl class="wpp_property_stats overview_stats">
             <?php foreach($gstats as $label => $value) : ?>
-              <?php $tag = $labels_to_keys[$label]; ?>
-              <?php $alt = $alt == "alt" ? "" : "alt"; ?>
+              <?php
+                $tag = $labels_to_keys[$label];
+              ?>
+              <?php $alt = ($alt == "alt") ? "" : "alt"; ?>
               <dt class="wpp_stat_dt_<?php echo $tag; ?>"><?php echo $label; ?></dt>
               <dd class="wpp_stat_dd_<?php echo $tag; ?> <?php echo $alt; ?>"><?php echo $value; ?>&nbsp;</dd>
             <?php endforeach; ?>
@@ -1030,10 +1080,12 @@ if(!function_exists('draw_stats')):
             break;
           case 'list':
             ?>
-            <ul class="overview_stats wpp_property_stats">
+            <ul class="overview_stats wpp_property_stats list">
             <?php foreach($gstats as $label => $value) : ?>
-              <?php $tag = $labels_to_keys[$label]; ?>
-              <?php $alt = $alt == "alt" ? "" : "alt"; ?>
+              <?php
+                $tag = $labels_to_keys[$label];
+                $alt = ($alt == "alt") ? "" : "alt";
+              ?>
               <li class="wpp_stat_plain_list_<?php echo $tag; ?> <?php echo $alt; ?>">
                 <span class="attribute"><?php echo $label; ?>:</span>
                 <span class="value"><?php echo $value; ?>&nbsp;</span>
@@ -1044,6 +1096,7 @@ if(!function_exists('draw_stats')):
             break;
           case 'plain_list':
             foreach($gstats as $label => $value) {
+              $tag = $labels_to_keys[$label];
               ?>
               <span class="attribute"><?php echo $label; ?>:</span>
               <span class="value"><?php echo $value; ?>&nbsp;</span>
@@ -1052,6 +1105,9 @@ if(!function_exists('draw_stats')):
             }
             break;
         }
+        ?>
+        </div>
+        <?php
       }
     }
 
@@ -1097,11 +1153,13 @@ if(!function_exists('sort_stats_by_groups')):
 
     $wpp_property_stat_labels = apply_filters('wpp_property_stat_labels', $wp_properties['property_stats']);
 
-    $wpp_property_stat_labels_flip = array_flip($wpp_property_stat_labels);
+    $wpp_property_stat_labels_flip = array_flip((array)$wpp_property_stat_labels);
+
+    $fixed_stats = array();
 
     if($args['includes_values'] == true) {
       //** Fix data when an array is passed with actual values, such as from draw_stats() */
-      foreach($stats as $meta_label => $real_value) {
+      foreach( (array) $stats as $meta_label => $real_value) {
         $meta_key = $wpp_property_stat_labels_flip[$meta_label];
         //echo "$meta_key - $attribute_label <br />";
         $fixed_stats[$meta_label] = $meta_key;
@@ -1110,15 +1168,15 @@ if(!function_exists('sort_stats_by_groups')):
 
     //** Convert regular stat array to array with values as keys */
     if($args['fix_stats_array'] = true) {
-      foreach($stats as $meta_key) {
+      foreach( (array) $stats as $meta_key) {
         $attribute_label = $wpp_property_stat_labels[$meta_key];
         $fixed_stats[$attribute_label] = $meta_key;
       }
       $stats = $fixed_stats;
     }
 
-    $labels_to_keys = array_flip($wp_properties['property_stats']);
-    $group_keys = array_keys($wp_properties['property_groups']);
+    $labels_to_keys = array_flip((array)$wp_properties['property_stats']);
+    $group_keys = array_keys((array)$wp_properties['property_groups']);
 
     //** Get group from settings, or set to first group as default */
     $main_stats_group = (!empty($wp_properties['configuration']['main_stats_group']) ? $wp_properties['configuration']['main_stats_group'] : $group_keys[0]);
@@ -1127,7 +1185,7 @@ if(!function_exists('sort_stats_by_groups')):
 
     $ungrouped_stats = array();
 
-    foreach($stats as $label => $value) {
+    foreach((array)$stats as $label => $value) {
 
       $slug = $labels_to_keys[$label];
 
@@ -1201,7 +1259,7 @@ if(!function_exists('draw_property_search_form')):
       'cache' => true
     );
 
-    WPP_F::force_script_inclusion('jquery-number-format');
+    WPP_F::force_script_inclusion('wpp-jquery-number-format');
     $args = wp_parse_args( $args, $defaults );
     if(empty($args['search_attributes']) && isset($args['searchable_attributes'])) {
       $args['search_attributes'] = $args['searchable_attributes'];
@@ -1214,6 +1272,12 @@ if(!function_exists('draw_property_search_form')):
     if(!is_array($search_attributes)) {
       return;
     }
+
+    $property_stats = $wp_properties['property_stats'];
+    if(!isset($property_stats['property_type'])) {
+      $property_stats['property_type'] = __('Property Type', 'wpp');
+    }
+
     //** Load search values for attributes (from cache, or generate) */
     if (!empty($search_attributes) && !empty($searchable_property_types)) {
       $search_values = WPP_F::get_search_values($search_attributes, $searchable_property_types, $cache, $instance_id);
@@ -1232,7 +1296,7 @@ if(!function_exists('draw_property_search_form')):
         }
       }
     } ?>
-    <form action="<?php echo  UD_F::base_url($wp_properties['configuration']['base_slug']); ?>" method="post">
+    <form action="<?php echo WPP_F::base_url($wp_properties['configuration']['base_slug']); ?>" method="post">
     <?php if($sort_order){ ?>
     <input type="hidden" name="wpp_search[sort_order]" value ="<?php echo esc_attr($sort_order); ?>" />
     <?php } ?>
@@ -1300,12 +1364,10 @@ if(!function_exists('draw_property_search_form')):
         if(!isset($search_values[$attrib])) {
           continue;
         }
-        $label = (empty($wp_properties['property_stats'][$attrib]) ? UD_F::de_slug($attrib) : $wp_properties['property_stats'][$attrib]);
-        if(empty($label) && $attrib == 'property_type') {
-          $label = __('Type:', 'wpp');
-        }
+        $label = (empty($property_stats[$attrib]) ? WPP_F::de_slug($attrib) : $property_stats[$attrib]);
+
         ?>
-        <li class="wpp_search_form_element seach_attribute_<?php echo $attrib; ?>  wpp_search_attribute_type_<?php echo $wp_properties['searchable_attr_fields'][$attrib]; ?> <?php echo ((!empty($wp_properties['searchable_attr_fields'][$attrib]) && $wp_properties['searchable_attr_fields'][$attrib] == 'checkbox') ? 'wpp-checkbox-el' : ''); ?>">
+        <li class="wpp_search_form_element seach_attribute_<?php echo $attrib; ?>  wpp_search_attribute_type_<?php echo $wp_properties['searchable_attr_fields'][$attrib]; ?> <?php echo ((!empty($wp_properties['searchable_attr_fields'][$attrib]) && $wp_properties['searchable_attr_fields'][$attrib] == 'checkbox') ? 'wpp-checkbox-el' : ''); ?><?php echo ((!empty($wp_properties['searchable_attr_fields'][$attrib]) && ($wp_properties['searchable_attr_fields'][$attrib]=='multi_checkbox' && count($search_values[$attrib])==1 ) || $wp_properties['searchable_attr_fields'][$attrib]=='checkbox') ?' single_checkbox':'')?>">
           <?php ob_start(); ?>
           <?php $random_element_id = 'wpp_search_element_' . rand(1000,9999); ?>
           <label for="<?php echo $random_element_id; ?>" class="wpp_search_label wpp_search_label_<?php echo $attrib; ?>"><?php echo $label; ?><span class="wpp_search_post_label_colon">:</span></label>
@@ -1330,7 +1392,7 @@ if(!function_exists('draw_property_search_form')):
       <div class="clear"></div>
       </li>
       <?php } ?>
-      <li class="wpp_search_form_element submit"><input type="submit" class="wpp_search_button submit" value="<?php _e('Search','wpp') ?>" /></li>
+      <li class="wpp_search_form_element submit"><input type="submit" class="wpp_search_button submit btn btn-large" value="<?php _e('Search','wpp') ?>" /></li>
     </ul>
     </form>
   <?php }
@@ -1390,11 +1452,10 @@ if(!function_exists('wpp_render_search_input')):
           break;
         case 'dropdown':
           ?>
-          <?php $req_attr = WPP_F::encode_mysql_input(stripslashes($value)); ?>
           <select id="<?php echo $random_element_id; ?>" class="wpp_search_select_field wpp_search_select_field_<?php echo $attrib; ?> <?php echo $attribute_data['ui_class']; ?>" name="wpp_search[<?php echo $attrib; ?>]" >
           <option value="-1"><?php _e( 'Any' ,'wpp' ) ?></option>
           <?php foreach( $search_values[$attrib] as $v ) : ?>
-            <option value="<?php echo esc_attr($v); ?>" <?php selected($req_attr,$v); ?>><?php echo esc_attr( apply_filters("wpp_stat_filter_{$attrib}", $v) ); ?></option>
+            <option value="<?php echo esc_attr($v); ?>" <?php selected($value, $v ); ?>><?php echo esc_attr( apply_filters("wpp_stat_filter_{$attrib}", $v) ); ?></option>
           <?php endforeach; ?>
           </select>
           <?php
@@ -1624,7 +1685,7 @@ if(!function_exists('wpp_inquiry_form')):
               <?php echo apply_filters( 'comment_form_field_comment', $args['comment_field'] ); ?>
               <?php echo $args['comment_notes_after']; ?>
               <p class="form-submit">
-                <input name="submit" type="submit" id="<?php echo esc_attr( $args['id_submit'] ); ?>" value="<?php echo esc_attr( $args['label_submit'] ); ?>" />
+                <input name="submit" type="submit" id="<?php echo esc_attr( $args['id_submit'] ); ?>" value="<?php echo esc_attr( $args['label_submit'] ); ?>" class="btn" />
                 <?php comment_id_fields( $post_id ); ?>
               </p>
               <?php do_action( 'comment_form', $post_id ); ?>
@@ -1638,4 +1699,35 @@ if(!function_exists('wpp_inquiry_form')):
       <?php
     }
   }
+endif;
+
+if(!function_exists('wpp_css')):
+
+  /**
+   * It returns specific classes for element.
+   * This function is just wrapper.
+   * See: WPP_F::get_css_classes();
+   *
+   * @param type $element [required] It's used for determine which classes should be filtered.
+   * It can be set of template and element: "{template}::{element}"
+   * @param array $classes [optional] Set of classes
+   * @param boolean $return [optional] If false, prints classes. If true returns array of classes
+   * @param array $args [optional] Any set of additional arguments which can be needed.
+   * @return array|echo
+   * @author peshkov@UD
+   * @version 0.1
+   */
+  function wpp_css($element, $classes = false, $return = false, $args = array()) {
+    $args = array_merge((array)$args, array(
+      'instance' => 'wpp',
+      'element' => $element,
+      'classes' => $classes,
+      'return' => $return,
+    ));
+    if(is_callable(array('WPP_F','get_css_classes'))) {
+      return WPP_F::get_css_classes($args);
+    }
+    return false;
+  }
+
 endif;

@@ -18,8 +18,8 @@
 */
 
 // Uncomment to disable fancybox script being loaded on this page
-//wp_deregister_script('jquery-fancybox');
-//wp_deregister_script('jquery-fancybox-css');
+//wp_deregister_script('wpp-jquery-fancybox');
+//wp_deregister_script('wpp-jquery-fancybox-css');
 ?>
 
 <?php get_header(); ?>
@@ -87,50 +87,52 @@
   </script>
 
 
-  <div id="container" class="<?php echo (!empty($post->property_type) ? $post->property_type . "_container" : "");?>">
-    <div id="content" role="main" class="property_content">
+  <div id="container" class="<?php wpp_css('property::container', array((!empty($post->property_type) ? $post->property_type . "_container" : ""))); ?>">
+    <div id="content" class="<?php wpp_css('property::content', "property_content"); ?>" role="main">
       <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 
-      <div class="building_title_wrapper">
+      <div class="<?php wpp_css('property::title', "building_title_wrapper"); ?>">
         <h1 class="property-title entry-title"><?php the_title(); ?></h1>
         <h3 class="entry-subtitle"><?php the_tagline(); ?></h3>
       </div>
 
 
-      <div class="entry-content">
-        <div class="wpp_the_content"><?php @the_content(); ?></div>
+      <div class="<?php wpp_css('property::entry_content', "entry-content"); ?>">
+        <div class="<?php wpp_css('property::the_content', "wpp_the_content"); ?>"><?php @the_content(); ?></div>
 
         <?php if ( empty($wp_properties['property_groups']) || $wp_properties['configuration']['property_overview']['sort_stats_by_groups'] != 'true' ) : ?>
-          <dl id="property_stats" class="property_stats overview_stats">
+          <ul id="property_stats" class="<?php wpp_css('property::property_stats', "property_stats overview_stats list"); ?>">
             <?php if(!empty($post->display_address)): ?>
-            <dt class="wpp_stat_dt_location"><?php echo $wp_properties['property_stats'][$wp_properties['configuration']['address_attribute']]; ?></dt>
-            <dd class="wpp_stat_dd_location alt"><?php echo $post->display_address; ?>&nbsp;</dd>
+            <li class="wpp_stat_plain_list_location alt">
+              <span class="attribute"><?php echo $wp_properties['property_stats'][$wp_properties['configuration']['address_attribute']]; ?><span class="wpp_colon">:</span></span>
+              <span class="value"><?php echo $post->display_address; ?>&nbsp;</span>
+            </li>
             <?php endif; ?>
-            <?php @draw_stats("make_link=true&exclude={$wp_properties['configuration']['address_attribute']}"); ?>
-          </dl>
+            <?php @draw_stats("display=list&make_link=true&exclude={$wp_properties['configuration']['address_attribute']}"); ?>
+          </ul>
         <?php else: ?>
           <?php if(!empty($post->display_address)): ?>
-          <dl id="property_stats" class="property_stats overview_stats">
-            <dt class="wpp_stat_dt_location"><?php echo $wp_properties['property_stats'][$wp_properties['configuration']['address_attribute']]; ?></dt>
-            <dd class="wpp_stat_dd_location alt"><?php echo $post->display_address; ?>&nbsp;</dd>
-          </dl>
+          <ul id="property_stats" class="<?php wpp_css('property::property_stats', "property_stats overview_stats list"); ?>">
+            <li class="wpp_stat_plain_list_location alt">
+              <span class="attribute"><?php echo $wp_properties['property_stats'][$wp_properties['configuration']['address_attribute']]; ?><span class="wpp_colon">:</span></span>
+              <span class="value"><?php echo $post->display_address; ?>&nbsp;</span>
+            </li>
+          </ul>
           <?php endif; ?>
-          <?php @draw_stats("make_link=true&exclude={$wp_properties['configuration']['address_attribute']}"); ?>
+          <?php @draw_stats("display=list&make_link=true&exclude={$wp_properties['configuration']['address_attribute']}"); ?>
         <?php endif; ?>
 
-      <?php if(!empty($wp_properties['taxonomies'])) foreach($wp_properties['taxonomies'] as $tax_slug => $tax_data): ?>
-        <?php if(get_features("type={$tax_slug}&format=count")):  ?>
-        <div class="<?php echo $tax_slug; ?>_list">
-        <h2><?php echo $tax_data['label']; ?></h2>
-        <ul class="clearfix">
-        <?php get_features("type={$tax_slug}&format=list&links=true"); ?>
-        </ul>
-        </div>
-        <?php endif; ?>
-      <?php endforeach; ?>
-
-
+        <?php if(!empty($wp_properties['taxonomies'])) foreach($wp_properties['taxonomies'] as $tax_slug => $tax_data): ?>
+          <?php if(get_features("type={$tax_slug}&format=count")):  ?>
+          <div class="<?php echo $tax_slug; ?>_list">
+          <h2><?php echo $tax_data['label']; ?></h2>
+          <ul class="clearfix">
+          <?php get_features("type={$tax_slug}&format=list&links=true"); ?>
+          </ul>
+          </div>
+          <?php endif; ?>
+        <?php endforeach; ?>
 
         <?php if(is_array($wp_properties['property_meta'])): ?>
         <?php foreach($wp_properties['property_meta'] as $meta_slug => $meta_title):
@@ -144,7 +146,7 @@
 
 
         <?php if(WPP_F::get_coordinates()): ?>
-          <div id="property_map" style="width:100%; height:450px"></div>
+          <div id="property_map" class="<?php wpp_css('property::property_map'); ?>" style="width:100%; height:450px"></div>
         <?php endif; ?>
 
         <?php if(class_exists('WPP_Inquiry')): ?>
@@ -154,7 +156,7 @@
 
 
         <?php if($post->post_parent): ?>
-          <a href="<?php echo $post->parent_link; ?>"><?php _e('Return to building page.','wpp') ?></a>
+          <a href="<?php echo $post->parent_link; ?>" class="<?php wpp_css('btn', "btn btn-return"); ?>"><?php _e('Return to building page.','wpp') ?></a>
         <?php endif; ?>
 
       </div><!-- .entry-content -->
@@ -168,7 +170,7 @@
   // Primary property-type sidebar.
   if ( is_active_sidebar( "wpp_sidebar_" . $post->property_type ) ) : ?>
 
-    <div id="primary" class="widget-area <?php echo "wpp_sidebar_" . $post->property_type; ?>" role="complementary">
+    <div id="primary" class="<?php wpp_css('property::primary', "widget-area wpp_sidebar_{$post->property_type}"); ?>" role="complementary">
       <ul class="xoxo">
         <?php dynamic_sidebar( "wpp_sidebar_" . $post->property_type ); ?>
       </ul>
