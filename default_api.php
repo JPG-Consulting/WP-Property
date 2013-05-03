@@ -146,6 +146,7 @@
         'numberposts' => -1,
         'post_status' => null,
         'post_parent' => $post->ID,
+        'suppress_filters' => 0
       );
 
       if( !empty( $atts['orderby'] ) ) {

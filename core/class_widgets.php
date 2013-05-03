@@ -245,7 +245,8 @@ class OtherPropertiesWidget extends WP_Widget {
         'post_type'     => 'property',
         'post_status'   => 'publish',
         'post_parent'   => $post->post_parent,
-        'exclude'         => $post->ID
+        'exclude'         => $post->ID,
+        'suppress_filters' => 0
       ));
     } else {
       $properties = WPP_F::get_properties("property_type={$this_property['property_type']}&pagi=0--$amount_items");
@@ -491,6 +492,7 @@ class ChildPropertiesWidget extends WP_Widget {
       'numberposts'    => $amount_items ,
       'post_status'    => 'publish',
       'post_parent'    => $post->ID,
+      'suppress_filters' => 0
     );
 
     $attachments = get_posts($argus);
@@ -963,7 +965,8 @@ class LatestPropertiesWidget extends WP_Widget {
       'post_status' => 'publish',
       'post_parent' => null, // any parent
       'order' => 'DESC',
-      'orderby' => 'post_date'
+      'orderby' => 'post_date',
+      'suppress_filters' => 0
     );
 
     $postslist = get_posts($arg);

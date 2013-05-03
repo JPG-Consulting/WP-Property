@@ -3286,7 +3286,17 @@ class WPP_F extends UD_API {
               $matching_id_filter = implode("' OR ID ='", $matching_ids);
               $matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE (ID ='$matching_id_filter') AND post_type = 'property'");
             } else {
-              $matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'property'");
+              // Make it the wordpress way to eanble WPML
+              $args = array(
+	            'numberposts'     => -1,
+	            'post_type'       => 'property',
+	            'suppress_filters' => false 
+              );
+              $posts = get_posts($args);
+              foreach ($posts as $post) {
+              	$matching_ids[] = $post->ID;
+              }
+              //$matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'property'");
             }
             break;
           }
