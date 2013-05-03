@@ -3104,6 +3104,8 @@ class WPP_F extends UD_API {
   static function get_properties($args = "", $total = false) {
     global $wpdb, $wp_properties, $wpp_query;
 
+    $properties_db = new WPP_Properties();
+    
     // Non post_meta fields
     $non_post_meta = array(
       'post_title'  => 'like',
@@ -3284,19 +3286,19 @@ class WPP_F extends UD_API {
           if ($specific == 'all') {
             if (isset($matching_ids)) {
               $matching_id_filter = implode("' OR ID ='", $matching_ids);
-              $matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE (ID ='$matching_id_filter') AND post_type = 'property'");
+              $where_clause = "ID = '" . $matching_id_filter . "'";
+              $properties_db->setWhere($where_clause);
+              $tProperties = $properties_db->getProperties(array('numberposts' => -1));
+              //$matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE (ID ='$matching_id_filter') AND post_type = 'property'");
             } else {
               // Make it the wordpress way to eanble WPML
-              $args = array(
-	            'numberposts'     => -1,
-	            'post_type'       => 'property',
-	            'suppress_filters' => false 
-              );
-              $posts = get_posts($args);
-              foreach ($posts as $post) {
-              	$matching_ids[] = $post->ID;
-              }
+              $properties_db->setWhere(null);
+              $tProperties = $properties_db->getProperties(array('numberposts' => -1));
               //$matching_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'property'");
+            }
+            
+            foreach ($tProperties as $property) {
+              $matching_ids[] = $property->ID;
             }
             break;
           }
@@ -5383,4 +5385,16 @@ if ( !function_exists('property_feed') ) {
     return $qv;
 
   }
+}
+
+
+
+if ( !function_exists('property_feed') ) {
+	function get_properties_where_id_in( $where = '' ) {
+    	global $wpdb;
+ 
+    	$where .= $wpdb->prepare( " AND post_date > %s", date( 'Y-m-d', strtotime('-30 days') ) );
+ 
+    	return $where;
+	}
 }
