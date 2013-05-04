@@ -123,6 +123,7 @@ class WPP_Core {
 
     add_filter("manage_edit-property_sortable_columns", array(&$this, "sortable_columns"));
     add_filter("manage_edit-property_columns", array(&$this, "edit_columns"));
+    add_action("manage_pages_custom_column", array(&$this, "columns_data"));
 
     /** Called in setup_postdata().  We add property values here to make available in global $post variable on frontend */
     add_action('the_post', array('WPP_F','the_post'));
@@ -154,9 +155,6 @@ class WPP_Core {
 
     //** Determines if current request is for a child property */
     add_filter("posts_results", array('WPP_F', "posts_results"));
-
-    //** Hack. Used to avoid issues of some WPP capabilities */
-    add_filter('current_screen', array($this, 'current_screen'));
 
     //** Load admin header scripts */
     add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
@@ -411,24 +409,6 @@ class WPP_Core {
 
     // Create property settings page
     $settings_page  = add_submenu_page( 'edit.php?post_type=property', __('Settings','wpp'), __('Settings','wpp'), 'manage_wpp_settings', 'property_settings', create_function('','global $wp_properties; include "ui/page_settings.php";'));
-    $all_properties = add_submenu_page( 'edit.php?post_type=property', $wp_properties['labels']['all_items'], $wp_properties['labels']['all_items'], 'edit_wpp_properties', 'all_properties', create_function('','global $wp_properties, $screen_layout_columns; include "ui/page_all_properties.php";'));
-
-    /**
-     * Next used to add custom submenu page 'All Properties' with Javascript dataTable
-     * @author Anton K
-     */
-    if(!empty($submenu['edit.php?post_type=property'])) {
-
-      //** Comment next line if you want to get back old Property list page. */
-      array_shift($submenu['edit.php?post_type=property']);
-
-      foreach ($submenu['edit.php?post_type=property'] as $key => $page) {
-        if ( $page[2] == 'all_properties' ) {
-          unset( $submenu['edit.php?post_type=property'][ $key ] );
-          array_unshift( $submenu['edit.php?post_type=property'], $page );
-        }
-      }
-    }
 
     // Load jQuery UI Tabs and Cookie into settings page (settings_page_property_settings)
     add_action('admin_print_scripts-' . $settings_page, create_function('', "wp_enqueue_script('jquery-ui-tabs');wp_enqueue_script('jquery-cookie');"));
@@ -775,11 +755,9 @@ class WPP_Core {
   function edit_columns($columns) {
     global $wp_properties;
 
-    unset($columns);
+    if (isset($columns['date'])) unset($columns['date']);
 
-    $columns['cb'] = "<input type=\"checkbox\" />";
-    $columns['title'] = __('Title','wpp');
-    $columns['property_type'] = __('Type','wpp');
+    $columns['wpp_property_type'] = __('Type','wpp');
 
     if(is_array($wp_properties['property_stats'])) {
       foreach($wp_properties['property_stats'] as $slug => $title)
@@ -789,14 +767,44 @@ class WPP_Core {
     }
 
     $columns['city'] = __('City','wpp');
-    $columns['overview'] = __('Overview','wpp');
+    $columns['wpp_overview'] = __('Overview','wpp');
     $columns['featured'] = __('Featured','wpp');
     $columns['menu_order'] = __('Order','wpp');
-    $columns['thumbnail'] = __('Thumbnail','wpp');
+    $columns['wpp_thumbnail'] = __('Thumbnail','wpp');
 
     $columns = apply_filters('wpp_admin_overview_columns', $columns);
     //
     return $columns;
+  }
+  
+  function columns_data($column)
+  {
+  	global $post, $wp_properties;
+  	
+  	switch ($column) {
+  		case 'wpp_overview':
+  			$metas = array('price', 'bedrooms', 'bathrooms', 'deposit', 'area', 'phone_number', 'lease_terms', 'pet_policy', 'school', 'tagline');
+  			foreach ($metas as $meta) {
+  				$meta_value = get_post_meta($post->ID, $meta, true);
+  				if (!empty($meta_value)) {
+  					$meta_name = preg_replace('/\_/', ' ', $meta);
+  					$meta_name = ucwords($meta_name);
+  					echo __($meta_name) . ": " . $meta_value . '<br />'; 
+  				}
+  			}
+  			break;
+  		case 'wpp_property_type':
+  			$property_type = get_post_meta($post->ID, 'property_type', true);
+  			echo (!empty($wp_properties['property_types'][$property_type]) ? $wp_properties['property_types'][$property_type] : ucwords($property_type));
+  			break;
+  		case 'wpp_thumbnail':
+  			$thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+  			if ($thumbnail_id) {
+  				echo wp_get_attachment_image($thumbnail_id);
+  			}
+  			break;
+  			
+  	}	
   }
 
   /**
@@ -1724,21 +1732,6 @@ class WPP_Core {
         return $wpp_settings;
     }
 
-  /*
-   * Hack to avoid issues with capabilities and views.
-   *
-   */
-  function current_screen($screen){
-
-    switch($screen->id){
-      case "edit-property":
-        wp_redirect('edit.php?post_type=property&page=all_properties');
-        exit();
-        break;
-    }
-
-    return $screen;
-  }
 
   /*
    * Adds all WPP custom capabilities to administrator role.
