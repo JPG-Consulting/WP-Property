@@ -768,7 +768,7 @@ class WPP_Core {
 
     $columns['city'] = __('City','wpp');
     $columns['wpp_overview'] = __('Overview','wpp');
-    $columns['featured'] = __('Featured','wpp');
+    $columns['wpp_featured'] = __('Featured','wpp');
     $columns['menu_order'] = __('Order','wpp');
     $columns['wpp_thumbnail'] = __('Thumbnail','wpp');
 
@@ -782,6 +782,17 @@ class WPP_Core {
   	global $post, $wp_properties;
   	
   	switch ($column) {
+  		case 'wpp_featured':
+  			// TODO: Button does nothing as there is no FORM element
+  			//       Should add feature to dropdown?
+  			//       Add featured filter?
+  			$featured = get_post_meta( $post->ID, 'featured', true );
+  			if ($featured === "true") {
+  				echo "<input type='button' id='wpp_feature_{$post->ID}' class='wpp_featured_toggle wpp_is_featured' nonce='".wp_create_nonce('wpp_make_featured_' . $post->ID)."' value='".__('Featured','wpp')."' />";
+  			} else {
+              echo "<input type='button' id='wpp_feature_{$post->ID}' class='wpp_featured_toggle' ' nonce='".wp_create_nonce('wpp_make_featured_' . $post->ID)."'  value='".__('Add to Featured','wpp')."' />";
+  			}
+  			break;
   		case 'wpp_overview':
   			$metas = array('price', 'bedrooms', 'bathrooms', 'deposit', 'area', 'phone_number', 'lease_terms', 'pet_policy', 'school', 'tagline');
   			foreach ($metas as $meta) {
