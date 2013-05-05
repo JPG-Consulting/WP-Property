@@ -37,7 +37,7 @@
     <div class="<?php wpp_css('property_overview::property_div', "property_div {$property['post_type']} clearfix"); ?>">
 
         <div class="<?php wpp_css('property_overview::left_column', "wpp_overview_left_column"); ?>" style="width:<?php echo $thumbnail_dimentions['width']+12; /* 12 is boubled image border */?>px; float:left; ">
-          <?php property_overview_image(); ?>
+          <?php property_overview_image($thumbnail_dimentions); ?>
         </div>
 
         <div class="<?php wpp_css('property_overview::right_column', "wpp_overview_right_column"); ?>" style="margin-left:<?php echo $thumbnail_dimentions['width']+12; /* 12 is boubled image border */?>px; ">

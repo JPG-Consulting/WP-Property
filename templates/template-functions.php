@@ -135,7 +135,8 @@ if(!function_exists('property_overview_image')) {
       ?>
       <div class="property_image">
         <a href="<?php echo $thumbnail_link; ?>" title="<?php echo $property['post_title'] . ($property['parent_title'] ? __(' of ', 'wpp') . $property['parent_title'] : "");?>"  class="property_overview_thumb property_overview_thumb_<?php echo $thumbnail_size; ?> <?php echo $link_class; ?> thumbnail" rel="properties" >
-          <img width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" src="<?php echo $image['link']; ?>" alt="<?php echo $property['post_title'];?>" />
+          <!-- <img width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" src="<?php echo $image['link']; ?>" alt="<?php echo $property['post_title'];?>" />  -->
+          <img width="<?php echo $image['width']; ?>" src="<?php echo $image['link']; ?>" alt="<?php echo $property['post_title'];?>" />
         </a>
       </div>
       <?php

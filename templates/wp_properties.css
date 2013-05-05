@@ -918,7 +918,8 @@ ul.wpp_property_stats.list li .value {}
 }
 
 .wpp_row_view div.property_div {
-  overflow: auto;
+  /*overflow: auto;*/
+  overflow:none;
   -khtml-border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -974,7 +975,7 @@ ul.wpp_property_stats.list li .value {}
 }
 
 .wpp_row_view .property_image .property_overview_thumb {
-  background: none repeat scroll 0 0 #EFEFEF;
+  /*background: none repeat scroll 0 0 #EFEFEF;*/
   color: black;
   display: block;
   text-align: center;
